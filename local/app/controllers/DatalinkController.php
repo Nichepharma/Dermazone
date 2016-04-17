@@ -69,6 +69,14 @@ class DatalinkController extends BaseController
             $messages = DB::select($sql);
             return ireturn(json_encode($messages));
 
+          case 'get_plan_init':
+            $sql = "SELECT customer_id,type from user_customer
+            JOIN customer on user_customer.customer_id=customer.id
+            JOIN ()
+            WHERE user_id={$data_iOS->rep_id}";
+            $results = DB::select($sql);
+            return ireturn(json_encode($results));
+
         case 'insert_workshop':
           $workshop = new Workshop;
           $workshop->user_id = $data_iOS->user_id;

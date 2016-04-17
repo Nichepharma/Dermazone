@@ -25,6 +25,10 @@
             <div class="col-md-2 col-xs-6">
                 <button class="buttonallsite3" ng-class="{'active': activeTab=='pharms'}" ng-click="showPharms()">Pharmacies</button>
             </div>
+
+            <div class="col-md-2 col-xs-6">
+                <button class="buttonallsite3" ng-class="{'active': activeTab=='pharms'}" ng-click="showWorkshops()">Workshops</button>
+            </div>
         </div>
 
         <div class="col-sm-12">
@@ -238,6 +242,32 @@
                 </tr>
                 </tbody>
             </table>
+
+            <table st-safe-src="workshopsCollection" st-table="displayworkshopsCollection" class="table table-striped table-bordered"
+                   id="workshopsTable">
+                <thead>
+                <tr>
+                    <th st-sort="test">Customer</th>
+                    <th st-sort="test">Date</th>
+                    <th st-sort="test">Samples</th>
+                    <th st-sort="test">Product Category</th>
+                    <th st-sort="test">Sub Category</th>
+                    <th st-sort="test">Comments & Notes</th>
+
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in displayworkshopsCollection">
+                    <td>[[row.name]]</td>
+                    <td>[[row.workshop_date]]</td>
+                    <td>[[row.samples]]</td>
+                    <td>[[row.product_name]]</td>
+                    <td>[[row.subcat]]</td>
+                    <td>[[row.comment]]</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
     </div>
@@ -320,6 +350,22 @@
                             });
                 } else {
                     $('#pharmsTable').fadeIn();
+                }
+            };
+
+            scope.showWorkshops = function () {
+                $('.table').hide();
+                scope.activeTab = 'workshops';
+                if (typeof (scope.workshopsCollection) === 'undefined') {
+                    $http.get('{{url('insights/accumulative-details/'.$data['userData']->id.'?type=workshops')}}')
+                            .then(function (response) {
+                                scope.workshopsCollection = response.data.workshops;
+                                scope.displayworkshopsCollection = [].concat(scope.workshopssCollection);
+                                //scope.areas = angular.fromJson(response.data.areas);
+                                $('#workshopsTable').fadeIn();
+                            });
+                } else {
+                    $('#workshopsTable').fadeIn();
                 }
             };
 

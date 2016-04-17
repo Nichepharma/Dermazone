@@ -70,7 +70,6 @@ class InsightsController extends BaseController
             $this->data['products'][$id] = $name . ': 0';
         }
 
-
         foreach ($allCalls as $callProductId => $productVisits) {
             $productVisits = count($productVisits);
             $this->data['products'][$callProductId] = $products[$callProductId] . ': ' . $productVisits;
@@ -89,6 +88,7 @@ class InsightsController extends BaseController
         $calls = $calls->join('customer', 'visit.customer_id', '=', 'customer.id')
             ->get(['visit.id', 'product_id', 'customer.type']);
 
+
         $customerTypes = CustomerType::lists(false);
         $this->data['calls'] = [];
 
@@ -104,8 +104,7 @@ class InsightsController extends BaseController
         // slide analysis
         // How many times slide used in visits for this product
 
-        $slides = ProductSlide::where('product_id', $productId)->lists('name', 'id');
-
+        $slides = ProductSlide::where('product_id', $productId)->lists('cat', 'num');
 
         $calls = DB::table('visit')
             ->whereRaw("DATE(date) between '".$this->data['startDate']."' and '".$this->data['endDate']."'")
@@ -114,18 +113,18 @@ class InsightsController extends BaseController
             $calls = $calls->whereIn('visit.user_id', $this->data['userChildren']);
         }
 
-        $calls = $calls->where('visit_slide.slide_id', '!=', 0)
-            ->join('visit_slide', 'visit.id', '=', 'visit_slide.visit_id')
-            ->get(['visit.id', 'visit_slide.slide_id']);
+        $calls = $calls->join('visit_slide', 'visit.id', '=', 'visit_slide.visit_id')
+            ->get(['visit_slide.time', 'visit_slide.slide_id']);
 
         foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
-            $slideVisits = count($slideVisits);
-
+            $total_duration = 0;
+            foreach ($slideVisits as $slideVisit) {
+              $total_duration += $slideVisit->time;
+            }
             if (isset($slides[$slideId])) {
-                $this->data['slides'][$slides[$slideId]] = $slideVisits;
+                $this->data['slides'][$slides[$slideId]] += $total_duration;
             }
         }
-
         return View::make($this->data['modules'] . '.product', ['data' => $this->data]);
     }
 
@@ -195,7 +194,7 @@ class InsightsController extends BaseController
         // slide analysis
         // How many times slide used in visits for this product
 
-        $slides = ProductSlide::where('product_id', $productId)->lists('name', 'id');
+        $slides = ProductSlide::where('product_id', $productId)->lists('cat', 'num');
 
 
         $calls = DB::table('visit')
@@ -205,17 +204,18 @@ class InsightsController extends BaseController
             $calls = $calls->whereIn('visit.user_id', $this->data['userChildren']);
         }
 
-        $calls = $calls->where('visit_slide.slide_id', '!=', 0)
-            ->join('visit_slide', 'visit.id', '=', 'visit_slide.visit_id')
-            ->get(['visit.id', 'visit_slide.slide_id']);
+        $calls = $calls->join('visit_slide', 'visit.id', '=', 'visit_slide.visit_id')
+            ->get(['visit_slide.time', 'visit_slide.slide_id']);
 
-        foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
-            $slideVisits = count($slideVisits);
-
-            if (isset($slides[$slideId])) {
-                $this->data['slides'][$slides[$slideId]] = $slideVisits;
+            foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
+                $total_duration = 0;
+                foreach ($slideVisits as $slideVisit) {
+                  $total_duration += $slideVisit->time;
+                }
+                if (isset($slides[$slideId])) {
+                    $this->data['slides'][$slides[$slideId]] += $total_duration;
+                }
             }
-        }
 
         return View::make($this->data['modules'] . '.product_doctors', ['data' => $this->data]);
     }
@@ -767,6 +767,17 @@ class InsightsController extends BaseController
                                                       WHERE DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}')";
                     $nonVisited = DB::select($sql);
                     $data['pharms'] = $visited+$nonVisited;
+                    break;
+
+                case 'workshops':
+
+                    $sql = "SELECT *,product.name as product_name from workshop
+                    JOIN doctor on workshop.customer_id = doctor.customer_id
+                    JOIN product on workshop.product_id=product.id
+                    Where workshop.user_id ={$userId}
+                    AND DATE(workshop.workshop_date) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'";
+                    $workshops = DB::select($sql);
+                    $data['workshops'] = $workshops;
                     break;
             }
 
