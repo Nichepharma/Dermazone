@@ -1,0 +1,72 @@
+[15-Jun-2015 14:53:49 UTC] PHP Warning:  PHP Startup: Unable to load dynamic library '/usr/local/lib/php/extensions/no-debug-non-zts-20121212/php_iconv.dll' - /usr/local/lib/php/extensions/no-debug-non-zts-20121212/php_iconv.dll: cannot open shared object file: No such file or directory in Unknown on line 0
+[15-Jun-2015 14:53:49 UTC] PHP Warning:  PHP Startup: ChartDirector PHP API: Unable to initialize module
+Module compiled with module API=20100525
+PHP    compiled with module API=20121212
+These options need to match
+ in Unknown on line 0
+[06-Jul-2015 14:26:35 UTC] PHP Fatal error:  Class 'PHPMailer' not found in /home/thinkds/public_html/crm/local/app/helpers/functions.php on line 632
+[05-Apr-2016 11:42:43 Africa/Cairo] PHP Parse error:  syntax error, unexpected end of file in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/CustomersController.php on line 231
+[05-Apr-2016 12:02:59 Africa/Cairo] PHP Fatal error:  Call to undefined function where() in /home2/nichepha/public_html/tacit/new-tacit/local/app/routes.php on line 39
+[05-Apr-2016 12:04:00 Africa/Cairo] PHP Fatal error:  Call to undefined function where() in /home2/nichepha/public_html/tacit/new-tacit/local/app/routes.php on line 39
+[05-Apr-2016 12:05:43 Africa/Cairo] PHP Fatal error:  Call to undefined function where() in /home2/nichepha/public_html/tacit/new-tacit/local/app/routes.php on line 39
+[05-Apr-2016 12:06:03 Africa/Cairo] PHP Fatal error:  Call to undefined function where() in /home2/nichepha/public_html/tacit/new-tacit/local/app/routes.php on line 39
+[05-Apr-2016 12:06:51 Africa/Cairo] PHP Fatal error:  Call to undefined function where() in /home2/nichepha/public_html/tacit/new-tacit/local/app/routes.php on line 39
+[06-Apr-2016 09:22:16 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:22:20 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:22:36 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:22:39 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:24:13 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:27:22 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:27:55 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:28:56 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:29:25 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:29:26 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:29:39 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:29:41 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:29:52 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 09:29:53 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 411
+[06-Apr-2016 11:18:42 Africa/Cairo] PHP Fatal error:  Cannot redeclare class CustomersController in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 42
+[06-Apr-2016 11:19:16 Africa/Cairo] PHP Fatal error:  Cannot redeclare class CustomersController in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 42
+[06-Apr-2016 11:24:36 Africa/Cairo] PHP Fatal error:  Cannot redeclare class CustomersController in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 42
+[06-Apr-2016 11:24:52 Africa/Cairo] PHP Fatal error:  Cannot redeclare class CustomersController in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 42
+[06-Apr-2016 11:28:47 Africa/Cairo] PHP Fatal error:  Cannot redeclare class CustomersController in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 42
+[06-Apr-2016 12:47:50 Africa/Cairo] PHP Fatal error:  Class 'App\Http\Controllers\BaseController' not found in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 6
+[06-Apr-2016 14:37:30 Africa/Cairo] PHP Fatal error:  Class 'User' not found in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 34
+[06-Apr-2016 14:40:18 Africa/Cairo] PHP Fatal error:  Call to undefined method UsersController::where() in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 34
+[07-Apr-2016 09:13:31 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:13:33 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:13:36 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:13:37 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:13:39 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:15:44 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:15:46 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 09:16:11 Africa/Cairo] PHP Fatal error:  Call to a member function is() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 419
+[07-Apr-2016 11:31:58 Africa/Cairo] PHP Fatal error:  Call to a member function first() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 36
+[07-Apr-2016 13:56:56 Africa/Cairo] PHP Fatal error:  Call to undefined function iOS_return() in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 44
+[07-Apr-2016 13:57:32 Africa/Cairo] PHP Fatal error:  Call to undefined function iOS_return() in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 48
+[07-Apr-2016 13:57:33 Africa/Cairo] PHP Fatal error:  Call to undefined function iOS_return() in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 48
+[07-Apr-2016 13:57:53 Africa/Cairo] PHP Fatal error:  Call to undefined function iOS_return() in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 48
+[07-Apr-2016 13:59:35 Africa/Cairo] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 5
+[07-Apr-2016 13:59:53 Africa/Cairo] PHP Parse error:  syntax error, unexpected 'public' (T_PUBLIC) in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 5
+[11-Apr-2016 12:45:45 Africa/Cairo] PHP Fatal error:  Call to a member function get() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 84
+[11-Apr-2016 12:59:06 Africa/Cairo] PHP Fatal error:  Function name must be a string in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 88
+[11-Apr-2016 14:35:16 Africa/Cairo] PHP Fatal error:  Call to undefined function now() in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/DatalinkController.php on line 65
+[12-Apr-2016 12:31:06 Africa/Cairo] PHP Parse error:  syntax error, unexpected ';', expecting ')' in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/OperationsController.php on line 39
+[12-Apr-2016 13:07:22 Africa/Cairo] PHP Parse error:  syntax error, unexpected 'width' (T_STRING), expecting ',' or ';' in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/OperationsController.php on line 67
+[12-Apr-2016 13:14:26 Africa/Cairo] PHP Parse error:  syntax error, unexpected 'return' (T_RETURN) in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/OperationsController.php on line 76
+[12-Apr-2016 13:27:28 Africa/Cairo] PHP Fatal error:  Class name must be a valid object or a string in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/OperationsController.php on line 76
+[12-Apr-2016 13:28:11 Africa/Cairo] PHP Fatal error:  Class name must be a valid object or a string in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/OperationsController.php on line 76
+[13-Apr-2016 11:22:44 Africa/Cairo] PHP Fatal error:  Call to a member function get() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 104
+[13-Apr-2016 11:27:43 Africa/Cairo] PHP Fatal error:  Call to a member function get() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 105
+[13-Apr-2016 11:28:09 Africa/Cairo] PHP Fatal error:  Call to a member function get() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 103
+[13-Apr-2016 11:28:34 Africa/Cairo] PHP Fatal error:  Call to a member function lists() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 103
+[13-Apr-2016 12:18:24 Africa/Cairo] PHP Fatal error:  Call to a member function get() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 110
+[13-Apr-2016 13:28:43 Africa/Cairo] PHP Fatal error:  Cannot use object of type stdClass as array in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 120
+[14-Apr-2016 06:24:41 Africa/Cairo] PHP Fatal error:  Unsupported operand types in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 689
+[14-Apr-2016 10:24:12 Africa/Cairo] PHP Fatal error:  Unsupported operand types in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 695
+[15-Apr-2016 10:58:49 Africa/Cairo] PHP Fatal error:  Unsupported operand types in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 787
+[15-Apr-2016 10:58:54 Africa/Cairo] PHP Fatal error:  Unsupported operand types in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 787
+[15-Apr-2016 10:58:57 Africa/Cairo] PHP Fatal error:  Unsupported operand types in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 787
+[15-Apr-2016 11:16:15 Africa/Cairo] PHP Fatal error:  Unsupported operand types in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 787
+[16-Apr-2016 23:31:34 Africa/Cairo] PHP Fatal error:  Call to a member function toArray() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 74
+[16-Apr-2016 23:31:54 Africa/Cairo] PHP Fatal error:  Call to a member function toArray() on a non-object in /home2/nichepha/public_html/tacit/new-tacit/local/app/controllers/InsightsController.php on line 74
