@@ -140,12 +140,26 @@ class DatalinkController extends BaseController
           return ireturn("", $data_iOS->visit_date);
 
         case 'insert_plan':
-        $visit->user_id = $data_iOS->user_id;
+        $user_id = $data_iOS->user_id;
+
+        //Deleting the previous plan
+        $date_start = date('Y-m-1', strtotime('-1 month'));
+        $date_end = date('Y-m-t', strtotime('+1 month'));
+        DB::table(visit_plan)
+        ->where('user_id', $user_id)
+        ->whereBetween('date', array($date_start, $date_end))
+        ->delete();
+
         $customers = explode("|", $data_iOS->customers);
         $dates = explode("|", $data_iOS->dates);
         foreach ($customers as $key => $customer) {
-          echo $key . $customer;
+          $visitplan = new VisitPlan;
+          $visitplan->user_id = $user_id;
+          $visitplan->customer_id = $customer;
+          $visitplan->date = $dates[$key];
+          $visitplan->save();
         }
+        return ireturn("", "saved");
 
         case 'test':
           return json_encode("4");

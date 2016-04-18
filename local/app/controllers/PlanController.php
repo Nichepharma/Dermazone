@@ -22,11 +22,22 @@ class PlanController extends BaseController
     {
         $this->data['provinceId'] = $provinceId;
 
-        $this->data['provinces'] = Province::select('name', 'id')->lists('name', 'id');
+        $provinces = Province::select('name', 'id');
+        if (!$this->data['user']->is('admin')) {
+            $provinceIds = Province::userProvinces($this->data['userChildren']);
+            $provinces = $provinces->whereIn('id', $provinceIds);
+        }
+        $this->data['provinces'] = $provinces->lists('name', 'id');
+
         $this->data['provinceId'] = $provinceId;
 
         if ($provinceId != null) {
-            $this->data['reps'] = UserModel::select(['id', 'fullname'])->where('province_id',$provinceId)->lists('fullname', 'id');
+            $reps = UserModel::select(['id', 'fullname']);
+            if (!$this->data['user']->is('admin')) {
+                $reps = $reps->whereIn('id', $this->data['userChildren']);
+            }
+
+            $this->data['reps'] = $reps->where('province_id',$provinceId)->lists('fullname', 'id');
         }
 
         return View::make($this->data['modules'] . '.provinces', ['data' => $this->data]);
@@ -41,7 +52,7 @@ class PlanController extends BaseController
 
 
             $plans = DB::select("
-    SELECT visit_plan.date , customer.name , customer.customer_type , customer.speciality , customer.customer_id,
+    SELECT DATE(visit_plan.date) as date , customer.name , customer.customer_type , customer.speciality , customer.customer_id,
     case
         when exists (select id from visit v where v.customer_id = visit_plan.customer_id and date(visit_plan.date) = date(v.date) and visit_plan.user_id = v.user_id) then
             'visited'
@@ -65,7 +76,7 @@ class PlanController extends BaseController
 
 
             $visits = DB::select("
-    SELECT visit.date , customer.name , customer.customer_type , customer.speciality , customer.customer_id
+    SELECT DATE(visit.date) as date , customer.name , customer.customer_type , customer.speciality , customer.customer_id
 
     FROM `visit` ,
         (select name , customer_id , '1' as customer_type , speciality from doctor
@@ -74,8 +85,8 @@ class PlanController extends BaseController
         union all
         select name , customer_id , '2' as customer_type , '-' as speciality from pharmacy ) as customer
 
---    where user_id = {$userId}
-    where date(visit.date) between date('{$this->data['from']}')
+    where visit.user_id = {$userId}
+    and date(visit.date) between date('{$this->data['from']}')
         and date( '{$this->data['to']}')
         and customer.customer_id = visit.customer_id
         and not exists (select id from visit_plan where visit_plan.customer_id = visit.customer_id and date(visit.date) = date(visit_plan.date) and visit.user_id = visit_plan.user_id)");
