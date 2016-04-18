@@ -39,7 +39,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in displayDoctorsCollection" id="doctor-[[row.customer_id]]">
-                    <td><a href="{{url('customers/doctor')}}/[[row.id]]" target="_blank">[[row.name]]</a></td>
+                    <td><a href="{{url('customers/doctor')}}/[[row.customer_id]]" target="_blank">[[row.name]]</a></td>
                     <td>[[row.speciality]]</td>
                     <td>[[row.grade]]</td>
                     <td class="visits">0</td>
@@ -94,7 +94,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in displaypharmaciesCollection" id="pharmacy-[[row.customer_id]]">
-                    <td><a href="{{url('customers/pharmacy')}}/[[row.id]]" target="_blank">[[row.name]]</a></td>
+                    <td><a href="{{url('customers/pharmacy')}}/[[row.customer_id]]" target="_blank">[[row.name]]</a></td>
                     <td>[[row.class]]</td>
                     <td class="visits">0</td>
                 </tr>

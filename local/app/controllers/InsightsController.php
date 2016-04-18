@@ -842,7 +842,7 @@ class InsightsController extends BaseController
             foreach ($doctors_visit as $date => $visits) {
                 $doctors_visit_count = count($visits);
                 $this->data['totalDoctorsVisit'] += $doctors_visit_count;
-                $this->data['doctors_visit'][date6($date)] = $doctors_visit_count;
+                $this->data['doctors_visit'][$date] = $doctors_visit_count;
             }
 
 

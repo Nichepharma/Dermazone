@@ -47,7 +47,7 @@
                     data.addColumn('string', 'visits');
                     data.addRows([
                             @foreach($data['doctors_visit'] as $date=>$visits)
-                        [new Date({{$date}}), {{$visits}}, '{{$visits}} Visits'],
+                        [parseDate('{{ date("Y-m-d", strtotime($date))}}'), {{$visits}}, '{{$visits}} Visits'],
                         @endforeach
                     ]);
 
