@@ -139,6 +139,14 @@ class DatalinkController extends BaseController
           $visit->save();
           return ireturn("", $data_iOS->visit_date);
 
+        case 'insert_plan':
+        $visit->user_id = $data_iOS->user_id;
+        $customers = explode("|", $data_iOS->customers);
+        $dates = explode("|", $data_iOS->dates);
+        foreach ($customers as $key => $customer) {
+          echo $key . $customer;
+        }
+
         case 'test':
           return json_encode("4");
 
