@@ -70,9 +70,9 @@ class DatalinkController extends BaseController
             return ireturn(json_encode($messages));
 
           case 'get_plan_init':
-            $sql = "SELECT customer_id,type from user_customer
+            $sql = "SELECT customer.id,customer.type, IFNULL(lv.lastvisit , 'No Visits') as lastvisit from user_customer
             JOIN customer on user_customer.customer_id=customer.id
-            JOIN ()
+            LEFT JOIN (select customer_id,max(date) as lastvisit from visit where user_id={$data_iOS->rep_id} group by customer_id) lv on customer.id=lv.customer_id
             WHERE user_id={$data_iOS->rep_id}";
             $results = DB::select($sql);
             return ireturn(json_encode($results));
