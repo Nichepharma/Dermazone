@@ -19,6 +19,8 @@ class KpiController extends BaseController
 
     public function getIndex()
     {
+        $this->data['page_title'] = 'KPI';
+
         $provinceIds = Province::userProvinces($this->data['userChildren']);
         $provinces = Province::select('name', 'id');
         if (!$this->data['user']->is('admin')) {
@@ -26,13 +28,16 @@ class KpiController extends BaseController
         }
         $this->data['provinces'] = $provinces->lists('name', 'id');
 
-        $reps = UserModel::select(['id', 'fullname']);
+        $reps = UserModel::select(['user.id', 'fullname']);
         if (!$this->data['user']->is('admin')) {
-            $reps = $reps->whereIn('id', $this->data['userChildren']);
+            $reps = $reps->whereIn('user.id', $this->data['userChildren']);
         }
         if (Input::has('province')) {
             $reps = $reps->where('province_id', Input::get('province'));
         }
+        $reps->where('role_user.role_id', 3)
+        ->leftJoin('role_user', 'user.id', '=', 'role_user.user_id');
+
         $this->data['reps'] = $reps->lists('fullname', 'id');
 
 

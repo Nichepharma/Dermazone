@@ -596,7 +596,9 @@ class InsightsController extends BaseController
 
         if ($provinceId != null) {
 
-            $sql = "select `id`, `fullname` from `user` WHERE province_id=$provinceId";
+            $sql = "SELECT user.id, user.fullname from user
+            LEFT JOIN role_user on user.id = role_user.user_id
+            WHERE province_id=$provinceId AND role_user.role_id=3";
 
             if (!$this->data['user']->is('admin')) {
                 $sql .= " and `user`.`id` in (" . toString($this->data['userChildren']) . ")";
@@ -872,7 +874,14 @@ class InsightsController extends BaseController
             // show users under this province
 
             $this->data['provinceId'] = $provinceId;
-            $this->data['reps'] = UserModel::where('province_id', $provinceId)->get(['id', 'fullname']);
+            $reps = UserModel::where('province_id', $provinceId)->where('role_user.role_id', 3)
+            ->leftJoin('role_user', 'user.id', '=', 'role_user.user_id');
+
+            if (!$this->data['user']->is('admin')) {
+                $reps = $reps->whereIn('user.id', $this->data['userChildren']);
+            }
+
+            $this->data['reps'] = $reps->get(['user.id', 'fullname']);
 
         }
 

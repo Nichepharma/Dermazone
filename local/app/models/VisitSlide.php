@@ -10,7 +10,7 @@ class VisitSlide extends Eloquent {
 
 	public function slideData()
 	{
-		return $this->belongsTo('ProductSlide','slide_id');
+		return $this->hasOne('ProductSlide','num', 'slide_id')->where('product_id' , 6);
 	}
 
 

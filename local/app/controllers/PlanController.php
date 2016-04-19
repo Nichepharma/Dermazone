@@ -20,6 +20,7 @@ class PlanController extends BaseController
 
     public function getIndex($provinceId = null)
     {
+        $this->data['page_title'] = 'Plan';
         $this->data['provinceId'] = $provinceId;
 
         $provinces = Province::select('name', 'id');
@@ -32,12 +33,15 @@ class PlanController extends BaseController
         $this->data['provinceId'] = $provinceId;
 
         if ($provinceId != null) {
-            $reps = UserModel::select(['id', 'fullname']);
+            $reps = UserModel::select(['user.id', 'fullname']);
             if (!$this->data['user']->is('admin')) {
-                $reps = $reps->whereIn('id', $this->data['userChildren']);
+                $reps = $reps->whereIn('user.id', $this->data['userChildren']);
             }
 
-            $this->data['reps'] = $reps->where('province_id',$provinceId)->lists('fullname', 'id');
+            //$this->data['reps'] = $reps->where('province_id',$provinceId)->lists('fullname', 'id');
+            $this->data['reps'] = $reps->where('province_id', $provinceId)->where('role_user.role_id', 3)
+            ->leftJoin('role_user', 'user.id', '=', 'role_user.user_id')
+            ->lists('fullname', 'id');
         }
 
         return View::make($this->data['modules'] . '.provinces', ['data' => $this->data]);
@@ -45,6 +49,7 @@ class PlanController extends BaseController
 
     public function getUserPlan($userId)
     {
+        $this->data['page_title'] = 'User Plan';
 
         if (Input::has('from')) {
             $this->data['from'] = Input::get('from');

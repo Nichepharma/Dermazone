@@ -70,7 +70,6 @@ class CustomersController extends BaseController
 
     public function getCustomersVisits()
     {
-
         $sql = "select `customer_id`, count(`customer_id`) as visits
                   from `visit`
                   WHERE DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'";
@@ -136,7 +135,9 @@ class CustomersController extends BaseController
         $this->data['visit'] = Visit::find($id);
         $this->data['visitProduct'] = Product::find($this->data['visit']->product_id);
         $this->data['visitRep'] = UserModel::find($this->data['visit']->user_id,['fullname']);
-        $this->data['visitSlides'] = VisitSlide::where('visit_id',$id)->with('slideData')->get();
+        //$VisitSlide->{'product_id'} = $this->data['visit']->product_id;
+        $this->data['visitSlides'] = VisitSlide::where('visit_id',$id)->get();
+        //$this->data['visitSlides'] = DB::select("select * from visit_slide");
 
         $this->data['customer'] = Customer::find($this->data['visit']->customer_id);
         $this->data['area'] = Area::find($this->data['customer']->area_id);

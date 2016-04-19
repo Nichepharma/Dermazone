@@ -24,24 +24,6 @@
                     <td>1.0</td>
                     <td><a href="itms-services://?action=download-manifest&amp;url=https://www.tacitapp.com/chiesi/apps/plan/TacitPlanChiesi.plist">Install</a></td>
                 </tr>
-                <tr>
-                    <th scope="row" width="50%"><img src="http://www.tacitapp.com/chiesi/apps/Atimos/images/Icon.png" border="0" alt="" class="media-middle"> Atimos</th>
-                    <td>8.3 MB</td>
-                    <td>1.0</td>
-                    <td><a href="itms-services://?action=download-manifest&amp;url=https://www.tacitapp.com/chiesi/apps/Atimos/Atimos.plist">Install</a></td>
-                </tr>
-                <tr class="warning">
-                    <th scope="row" width="50%"><img src="http://www.tacitapp.com/chiesi/apps/Brexin/images/Icon.png" border="0" alt="" class="media-middle"> Brexin</th>
-                    <td>5.2 MB</td>
-                    <td>1.0</td>
-                    <td><a href="itms-services://?action=download-manifest&amp;url=https://www.tacitapp.com/chiesi/apps/Brexin/Brexin.plist">Install</a></td>
-                </tr>
-                <tr>
-                    <th scope="row" width="50%"><img src="http://www.tacitapp.com/chiesi/apps/Foster/images/Icon.png" border="0" alt="" class="media-middle"> Foster</th>
-                    <td>10.9 MB</td>
-                    <td>1.2</td>
-                    <td><a href="itms-services://?action=download-manifest&amp;url=https://www.tacitapp.com/chiesi/apps/Foster/Foster.plist">Install</a></td>
-                </tr>
                 </tbody>
             </table>
             <div class="col-md-2 col-xs-6">
@@ -55,4 +37,3 @@
 
     </div>
 @stop
-

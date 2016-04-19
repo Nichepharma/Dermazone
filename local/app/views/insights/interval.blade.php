@@ -21,7 +21,7 @@
                 @include('others.print_buttons')
 
 
-                <h2>Accumlative Insights</h2>
+                <h2>Interval Insights</h2>
                 <table class="table myTable">
                     <thead>
                     <tr>
