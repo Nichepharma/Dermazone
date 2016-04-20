@@ -101,7 +101,10 @@ $hospitalsVisit = arrayGroupBy($data['visits'][3],'date');
             </td>
         @endforeach
     </tr>
+<?php
+/*
     <tr>
+
         <th class="planlefttd">Hospitals</th>
         @foreach($weekDays as $day)
             <td>
@@ -128,6 +131,8 @@ $hospitalsVisit = arrayGroupBy($data['visits'][3],'date');
             </td>
         @endforeach
     </tr>
+*/
+?>
 
     </tbody>
 </table>

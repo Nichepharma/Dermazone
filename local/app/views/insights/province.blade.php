@@ -23,7 +23,7 @@
                 @if($data['cities_menu'])
                     @foreach($data['cities_menu'] as $id=>$name)
                         <div class="col-md-2 col-xs-6">
-                            <a class="buttonallsite3" href="{{url('insights/city/'.$data['provinceId'].'/'.$id)}}">{{$name}}</a>
+                            <a class="buttonallsite3">{{$name}}</a>
                         </div>
                     @endforeach
                 @endif

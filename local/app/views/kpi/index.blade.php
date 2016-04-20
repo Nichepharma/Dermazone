@@ -78,7 +78,7 @@
             var options = {
 
                 pieHole: 0.4,
-                title: 'Covered / unCovered Doctors'
+                title: 'Covered/Uncovered [Doctors or Pharmacies]'
             };
             //var chartdata = new google.visualization.arrayToDataTable(data);
             var chart = new google.visualization.PieChart(document.getElementById('chart_div'));

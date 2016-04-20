@@ -57,14 +57,19 @@ class KpiController extends BaseController
             $sql = "select count(id) as total from customer where type=1 and id in (SELECT customer_id from user_customer where user_id=$userId)";
             $allDoctors = DB::select($sql);
 
+            if ($allDoctors[0]->total==0){
+              $sql = "select count(id) as total from customer where type=2 and id in (SELECT customer_id from user_customer where user_id=$userId)";
+              $allDoctors = DB::select($sql);
+              $this->data['customers_type'] = 2;
+            }
 
 
             $sql = "select count(DISTINCT customer_id) as visited
                                       from visit
                                       where customer_id in (SELECT customer_id from user_customer where user_id=$userId)
+                                      and user_id=$userId
                                       and date(visit.date) between '{$this->data['startDate']}' and '{$this->data['endDate']}'";
             $coveredDoctors = DB::select($sql);
-
 
 
             $sql = "select speciality,grade

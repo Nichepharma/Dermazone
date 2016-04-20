@@ -135,10 +135,26 @@ class CustomersController extends BaseController
         $this->data['visit'] = Visit::find($id);
         $this->data['visitProduct'] = Product::find($this->data['visit']->product_id);
         $this->data['visitRep'] = UserModel::find($this->data['visit']->user_id,['fullname']);
-        //$VisitSlide->{'product_id'} = $this->data['visit']->product_id;
-        $this->data['visitSlides'] = VisitSlide::where('visit_id',$id)->get();
-        //$this->data['visitSlides'] = DB::select("select * from visit_slide");
+        //$this->data['visitSlides'] = VisitSlide::where('visit_id',$id)->get();
 
+        $slides = ProductSlide::where('product_id', $this->data['visit']->product_id)->lists('cat', 'num');
+        $calls = DB::table('visit')->where('visit.id' , $id)
+        ->join('visit_slide', 'visit.id' , '=', 'visit_slide.visit_id')
+        ->get(['visit_slide.time', 'visit_slide.slide_id']);
+
+        $this->data['slides']['corrector'] = 0;
+        foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
+            $total_duration = 0;
+            foreach ($slideVisits as $slideVisit) {
+              $total_duration += $slideVisit->time;
+            }
+            if (isset($slides[$slideId])) {
+                $this->data['slides'][$slides[$slideId]] += $total_duration;
+            }
+        }
+        //return $this->data['slides'];
+
+        $this->data['slides'];
         $this->data['customer'] = Customer::find($this->data['visit']->customer_id);
         $this->data['area'] = Area::find($this->data['customer']->area_id);
 //        return $this->data['customer'];
@@ -180,7 +196,7 @@ class CustomersController extends BaseController
                         $provinces = Province::lists('name', 'id');
                         $cities = City::lists('name', 'id');
                         $users = UserModel::lists('fullname', 'id');
-                        $speciality = trim($importedItem['speciality']);
+                        $speciality = trim(modifySpec($importedItem['speciality']));
                         // check if province exists or insert it
                         if (in_array(trim($importedItem['province']), $provinces)) {
                             $provinceId = array_search(trim($importedItem['province']), $provinces);
@@ -282,5 +298,161 @@ class CustomersController extends BaseController
 
         return View::make($this->data['modules'] . '.import', ['data' => $this->data]);
     }
+
+  public function modifySpec($sp){
+   //if there is a dots abbrevations remove them
+
+   if (strpos($sp,'.') !== false){
+    $sp = str_replace(".", "", $sp);
+
+   }
+   if(stripos($sp, 'res') === 0){
+        $sp = str_replace("res", "", $sp);
+   }
+   if(stripos($sp, 'reg') === 0){
+        $sp = str_replace("reg", "", $sp);
+   }
+    $sp = trim($sp);
+
+   // check thta or is on the beginning of the string
+  if(stripos($sp, 'or') === 0){
+  return "ORS";
+  }
+  elseif(stripos($a,'code') !== false ){
+  return "NO CODE";
+  }
+  elseif(stripos($sp, 'u') === 0){
+  return "U";
+  }
+
+  elseif(stripos($sp, 's') === 0 || stripos($sp, 'gs') === 0 || (stripos($sp, 'g') === 0 && stripos($sp, 'su') !== false)) {
+  return "S";
+  }
+  elseif(stripos($sp, 'gy') === 0 || stripos($sp, 'ob') === 0){
+  return "GYN";
+  }
+  elseif(stripos($sp, 'PU') === 0 || stripos($sp, 'ch') === 0 || stripos($sp, 'resp') === 0 || stripos($sp, 'Pn') === 0 ){
+  return "PUD";
+  }
+   elseif(stripos($sp, 'family') !== false || stripos($sp, 'F') === 0){
+  return "FP";
+  }
+  elseif(stripos($sp, 'ent') === 0 || stripos($sp, 'e n') === 0 || stripos($sp, 'ear') === 0 || stripos($sp, 'ORT') === 0 || stripos($sp, 'OTo') === 0){
+  return "ENT";
+  }
+
+  elseif(stripos($sp, 'Den') !== false || stripos($sp, 'oral') !== false || stripos($sp, 'dont') !== false || stripos($sp, 'Dn') === 0){
+  return "DEN";
+  }
+
+  // general practitioner
+  //
+  elseif(stripos($sp, "gp") === 0 || stripos($sp, "gb") === 0 ||(stripos($sp, 'gener') !== false && (stripos($sp, 's') === false || stripos($sp, 'phys') !== false || stripos($sp, 'scop') !== false))){
+  return "GP";
+  }
+  // internal medicine
+  elseif(stripos($sp, 'im') === 0 || stripos($sp, 'int') !== false){
+  return "IM";
+  }
+  elseif(stripos($sp, 'Rh') === 0 || stripos($sp, 'Ru') === 0){
+  return "RHU";
+  }
+
+  elseif(stripos($sp, 'PD') !== false || stripos($sp, 'Ped') === 0 || stripos($sp, "paed") === 0|| stripos($sp, "pead") === 0){
+  return "PD";
+  }
+
+  //check there is  no overlapping with immunity
+  //infection disease
+
+   elseif(stripos($sp, 'i') === 0 && stripos($sp, 'im') == false && stripos($sp, 'ig') == false &&  stripos($sp, 'int') == false && stripos($sp, 'ic') == false){
+  return "ID";
+  }
+  // no overlapping with NS
+  //neuro
+
+  elseif(stripos($sp, 'N') === 0 && stripos($sp, 'sur') == false && stripos($sp, 'Ns') !== 0 && stripos($sp, 'nep') !== 0){
+  return "N";
+  }
+
+   elseif(stripos($sp, "ns") === 0||(stripos($sp, 'N') === 0 && stripos($sp, 'sur') !== false) ){
+  return "NS";
+  }
+   elseif(stripos($sp, 'end') === 0 ){
+  return "END";
+  }
+   elseif(stripos($sp, 'an') === 0 ){
+  return "AN";
+  }
+   elseif(stripos($sp, 'cc') === 0 || stripos($sp, 'care') !== false || stripos($sp, 'ic') === 0){
+  return "CCU";
+  }
+  elseif(stripos($sp, 'car') === 0 || stripos($sp, 'CD') === 0 || stripos($sp, 'crd') === 0){
+  return "CD";
+  }
+  elseif(strcasecmp($sp, "ntr") == 0|| stripos($sp, 'nu') === 0 || stripos($sp, 'diet') !== false){
+  return "NTR";
+  }
+  elseif(strcasecmp($sp, "ge") == 0 || stripos($sp, 'Ga') === 0 || stripos($sp, 'GIT') !== false || strcasecmp($sp, "gi") == 0 ){
+  return "GE";
+  }
+  //immunity
+   elseif(strcasecmp($sp, "ig") == 0 || stripos($sp, 'imm') === 0 ){
+  return "IG";
+  }
+   elseif(stripos($sp, 'dia') === 0 ){
+  return "DIA";
+  }
+  //plastic surgeon
+  elseif(strcasecmp($sp, "ps") == 0 || stripos($sp, 'PL') === 0 || stripos($sp, 'cos') === 0){
+  return "PS";
+  }
+  elseif(stripos($sp, 'OP') === 0 ){
+  return "OPH";
+  }
+  elseif(strcasecmp($sp, "vs") == 0 ||  (stripos($sp, 'v') === 0 &&  stripos($sp, 'sur') !== false )){
+  return "VS";
+  }
+  elseif(strcasecmp($sp, "v") == 0 ||  (stripos($sp, 'v') === 0 &&  stripos($sp, 'sur') == false )){
+  return "V";
+  }
+  elseif(stripos($sp, 'em') === 0 || strcasecmp($sp, "er") == 0 ){
+  return "EM";
+  }
+  elseif(stripos($sp, 'nep') === 0 ){
+  return "NEP";
+  }
+  //psychiatric
+   elseif(strcasecmp($sp, "p") == 0 ||  stripos($sp, 'psy') === 0 ){
+  return "P";
+  }
+   elseif(stripos($sp, 'ph') === 0 ){
+  return "PH";
+  }
+    elseif(strcasecmp($sp, "D") == 0 || stripos($sp, 'Der') !== false || strcasecmp($sp, "Dr") == 0 ){
+  return "D";
+  }
+  // we did write in on database
+  else  if(stripos($sp, 'tr') === 0){
+  return "TRS";
+  }
+    else  if(stripos($sp, 'h') === 0){
+  return "HEM";
+  }
+
+   else  if(stripos($sp, 'micro') === 0 || strcasecmp($sp, "mm") == 0 ){
+  return "MM";
+  }
+   elseif(stripos($sp, 'on') === 0 ){
+  return "ON";
+  }
+   elseif(stripos($sp, 'med') === 0 ){
+  return "MED";
+  }
+  else
+   return "No Code";
+
+}
+
 
 }

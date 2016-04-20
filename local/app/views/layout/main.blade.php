@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}"/>
-    <title>Tacit</title>
+    <title>Tacit @if(!empty($data['page_title'])) | {{$data['page_title']}}@endif</title>
 
     <!-- Bootstrap Core CSS -->
     {{ HTML::style('assets/css/bootstrap.min.css')}}

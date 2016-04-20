@@ -22,10 +22,6 @@
                     <div class="col-xs-6 callspart2cell2"> {{$data['doctor']->name}}</div>
                 </div>
                 <div class="row toppart">
-                    <div class="col-xs-6 cell">Center</div>
-                    <div class="col-xs-6 callspart2cell2"> {{$data['pharmacy']->center}}</div>
-                </div>
-                <div class="row toppart">
                     <div class="col-xs-6 cell">Speciality</div>
                     <div class="col-xs-6 callspart2cell2"> {{$data['doctor']->speciality}}</div>
                 </div>
@@ -36,10 +32,6 @@
                 <div class="row toppart">
                     <div class="col-xs-6 cell">Address</div>
                     <div class="col-xs-6 callspart2cell2"> {{$data['doctor']->address}}</div>
-                </div>
-                <div class="row toppart">
-                    <div class="col-xs-6 cell">Area</div>
-                    <div class="col-xs-6 callspart2cell2"> {{$data['area']->name}}</div>
                 </div>
                 <div class="row toppart">
                     <div class="col-xs-6 cell">Visit Time</div>
@@ -55,7 +47,7 @@
                 </div>
                 <div class="row toppart">
                     <div class="col-xs-6 cell">Samples Droped</div>
-                    <div class="col-xs-6 callspart2cell2"> {{$data['visitSlides']->count()}}</div>
+                    <div class="col-xs-6 callspart2cell2"> {{$data['visit']->samples}}</div>
                 </div>
                 <div class="row toppart">
                     <div class="col-xs-6 cell">Comment</div>
@@ -97,11 +89,14 @@
             data.addColumn('string', 'Page');
             data.addColumn('number', 'Seconds');
             data.addRows([
-                    @if($data['visitSlides'])
-                        @foreach($data['visitSlides'] as $slide)
-                            ['{{$slide->slide_data->name}}', {{$slide->time}}],
-                        @endforeach
-                    @endif
+                    //@if($data['visitSlides'])
+                    //    @foreach($data['visitSlides'] as $slide)
+                    //        ['{{$slide->slide_data->name}}', {{$slide->time}}],
+                    //    @endforeach
+                    //@endif
+                    @foreach($data['slides'] as $slideName=>$slideCalls)
+                    ['{{$slideName}}', {{$slideCalls}}],
+                    @endforeach
             ]);
             // Set chart options
             var options = {

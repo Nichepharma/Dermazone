@@ -34,7 +34,7 @@ class DatalinkController extends BaseController
           if ($response->count()){
             return ireturn(json_encode($response));;
           }else {
-            return ireturn("", "invalid");
+            return ireturn("[{\"id\":\"invalid\"}]");
           }
 
         case 'get_doctors':
@@ -145,9 +145,11 @@ class DatalinkController extends BaseController
         //Deleting the previous plan
         $date_start = date('Y-m-1', strtotime('-1 month'));
         $date_end = date('Y-m-t', strtotime('+1 month'));
-        DB::table(visit_plan)
-        ->where('user_id', $user_id)
+        DB::table('visit_plan')
+        ->where('visit_plan.user_id', $user_id)
+        ->where('customer.type', $data_iOS->type)
         ->whereBetween('date', array($date_start, $date_end))
+        ->leftJoin('customer', 'visit_plan.customer_id' , '=' , 'customer.id')
         ->delete();
 
         $customers = explode("|", $data_iOS->customers);
