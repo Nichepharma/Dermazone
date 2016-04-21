@@ -26,6 +26,10 @@
                     <div class="col-xs-6 callspart2cell2"> {{$data['doctor']->speciality}}</div>
                 </div>
                 <div class="row toppart">
+                    <div class="col-xs-6 cell">Center</div>
+                    <div class="col-xs-6 callspart2cell2"> {{$data['record']->center}}</div>
+                </div>
+                <div class="row toppart">
                     <div class="col-xs-6 cell">Product</div>
                     <div class="col-xs-6 callspart2cell2"> {{$data['visitProduct']->name}}</div>
                 </div>

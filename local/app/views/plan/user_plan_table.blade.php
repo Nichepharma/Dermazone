@@ -48,7 +48,7 @@ $hospitalsVisit = arrayGroupBy($data['visits'][3],'date');
     </thead>
     <tbody>
     <tr>
-        <th class="planlefttd">Doctors</th>
+        <th class="planlefttd">Private Markets</th>
         @foreach($weekDays as $day)
             <td>
                 @if(isset($doctorsPlan[$day]))

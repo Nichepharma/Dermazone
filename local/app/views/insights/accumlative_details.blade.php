@@ -259,7 +259,7 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in displayworkshopsCollection">
-                    <td>[[$index+1]]. [[row.name]]</td>
+                    <td>[[$index+1]]. [[row.doctor_name]]</td>
                     <td>[[row.workshop_date]]</td>
                     <td>[[row.samples]]</td>
                     <td>[[row.product_name]]</td>

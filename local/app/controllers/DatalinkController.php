@@ -25,6 +25,14 @@ class DatalinkController extends BaseController
       $action = Input::get('action');
       $data_iOS = json_decode(Input::get('data'));
 
+      //Saving Latest Request
+      $myfile = fopen("local/app/controllers/latest.txt", "w");
+      $txt = Input::get('action');
+      fwrite($myfile, $txt);
+      $txt = Input::get('data');
+      fwrite($myfile, $txt);
+      fclose($myfile);
+
       switch ($action) {
         case 'login':
           $iOS_user = $data_iOS->user;

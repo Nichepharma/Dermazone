@@ -773,7 +773,7 @@ class InsightsController extends BaseController
 
                 case 'workshops':
 
-                    $sql = "SELECT *,product.name as product_name from workshop
+                    $sql = "SELECT *,product.name as product_name,doctor.name as doctor_name from workshop
                     JOIN doctor on workshop.customer_id = doctor.customer_id
                     JOIN product on workshop.product_id=product.id
                     Where workshop.user_id ={$userId}
