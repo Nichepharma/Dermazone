@@ -29,6 +29,10 @@
             <div class="col-md-2 col-xs-6">
                 <button class="buttonallsite3" ng-class="{'active': activeTab=='pharms'}" ng-click="showWorkshops()">Workshops</button>
             </div>
+
+            <div class="col-md-2 col-xs-6">
+                <button class="buttonallsite3" ng-class="{'active': activeTab=='pharms'}" ng-click="showSumReport()">Summary Report</button>
+            </div>
         </div>
 
         <div class="col-sm-12">
@@ -268,6 +272,29 @@
                 </tr>
                 </tbody>
             </table>
+
+            <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
+                   id="sumreportTable">
+                <thead>
+                <tr>
+                    <th st-sort="test">Speciality</th>
+                    <th st-sort="test">Number Of Doctors</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in displaysumreportCollection">
+                    <td>[[$index+1]]. [[row.spec]]</td>
+                    <td>[[row.num]]</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr ng-repeat="row in displaysumreportCollectionTotal">
+                    <th st-sort="test">Total</th>
+                    <th st-sort="test">[[row.total]]</th>
+                </tr>
+              </tfoot>
+            </table>
         </div>
 
     </div>
@@ -366,6 +393,24 @@
                             });
                 } else {
                     $('#workshopsTable').fadeIn();
+                }
+            };
+
+            scope.showSumReport = function () {
+                $('.table').hide();
+                scope.activeTab = 'sumreport';
+                if (typeof (scope.sumreportCollection) === 'undefined') {
+                    $http.get('{{url('insights/accumulative-details/'.$data['userData']->id.'?type=sumreport')}}')
+                            .then(function (response) {
+                                scope.sumreportCollection = response.data.sumreport;
+                                scope.displaysumreportCollection = [].concat(scope.sumreportCollection);
+                                scope.sumreportCollectionTotal = response.data.sumreportTotal;
+                                scope.displaysumreportCollectionTotal = [].concat(scope.sumreportCollectionTotal);
+                                //scope.areas = angular.fromJson(response.data.areas);
+                                $('#sumreportTable').fadeIn();
+                            });
+                } else {
+                    $('#sumreportTable').fadeIn();
                 }
             };
 

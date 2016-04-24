@@ -1,6 +1,8 @@
 @extends('layout.main')
 
 @section('content')
+
+
     <div class="container-fluid page-content1">
 
         <div class='col-md-10 col-xs-12'>
@@ -29,10 +31,37 @@
                 <div class="col-md-2 col-xs-6"><input type="button" class="buttonallsite3" onclick="DrawDoctorsBySpeciality()" value="By Speciality"></div>
             </div>
 
-
             <div class="col-sm-12 graphContainer">
                 <div id="chart_div"></div>
             </div>
+
+
+            <!--
+            <div class="col-sm-6">
+            <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
+                   id="sumreportTable">
+                <thead>
+                <tr>
+                    <th st-sort="test">Speciality</th>
+                    <th st-sort="test">Number Of Doctors</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in displaysumreportCollection">
+                    <td>[[$index+1]]. [[row.spec]]</td>
+                    <td>[[row.num]]</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr ng-repeat="row in displaysumreportCollectionTotal">
+                    <th st-sort="test">Total</th>
+                    <th st-sort="test">[[row.total]]</th>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        -->
 
         </div>
 
@@ -41,6 +70,9 @@
 @stop
 
 @section('footer_inc')
+{{ HTML::script('assets/js/angular.min.js') }}
+
+
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type='text/javascript'>
         LoadGoogle();
@@ -135,4 +167,19 @@
         }
 
     </script>
+
+    <script language="javascript">
+        var app = angular.module('myApp', []);
+
+
+        function gridCtrl($scope) {
+            scope.helloMessage = "Hello ";
+        }
+        alert('done');
+    </script>
+
+    <div ng-controller='gridCtrl'>
+        <h1>{{helloMessage}}, world </h1>
+    </div>
+
 @stop

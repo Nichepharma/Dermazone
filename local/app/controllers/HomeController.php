@@ -21,6 +21,7 @@ class HomeController extends BaseController
      */
     public function getIndex()
     {
+        $this->data['page_title'] = 'Home';
         // get messages
         $this->data['messages'] = DB::select("select `message`, `date` from `message`
                                               WHERE `expiration_date` >= CURDATE()
@@ -59,12 +60,24 @@ class HomeController extends BaseController
             $this->data['endDate'] = $endDate;
         }
         return Redirect::to('insights/products');
-//        return View::make('index', ['data' => $this->data]);
     }
 
     public function postContact()
     {
         $input = Input::except('image');
+//        pr($input);
+        if($input['disabledSelect']=='Type of problem'){
+            Session::flash('alert', 'danger');
+            Session::flash('message', 'Please select the type of problem');
+            return Redirect::to('/');
+
+        }
+        if(empty($input['message'])){
+            Session::flash('alert', 'danger');
+            Session::flash('message', 'Please write your message');
+            return Redirect::to('/');
+        }
+
         $supervisors = DB::select("SELECT `fullname`,`email` from `user` WHERE `id` in (SELECT `super_id` FROM `user_supervisor` WHERE `user_id`={$this->data['user']->id})");
 
         // send mail to each supervisor of this user
@@ -83,7 +96,14 @@ class HomeController extends BaseController
 
             );
 
-            sendMail($data);
+            if(sendMail($data)){
+                Session::flash('alert', 'success');
+                Session::flash('message', 'Your message sent successfully.');
+
+            }else{
+                Session::flash('alert', 'danger');
+                Session::flash('message', 'Your message wasn\'t sent. Please Try again later');
+            }
         }
         return Redirect::to('/');
     }

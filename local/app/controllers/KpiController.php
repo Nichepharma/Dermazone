@@ -168,6 +168,12 @@ class KpiController extends BaseController
             $this->data['coveredDoctorsByGrade'][$grade] = count($doctors);
         }
 
+        $sql = "SELECT count(doctor.id) as num, doctor.speciality as spec from user_customer
+        Join doctor on user_customer.customer_id=doctor.customer_id
+        Where user_customer.user_id=23
+        Group by doctor.speciality";
+        $sumreport = DB::select($sql);
+        $data['sumreport'] = $sumreport;
 //        pr(DB::getQueryLog());
 //        return $this->data['coveredDoctorsByGrade'];
 

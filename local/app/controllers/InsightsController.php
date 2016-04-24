@@ -781,6 +781,21 @@ class InsightsController extends BaseController
                     $workshops = DB::select($sql);
                     $data['workshops'] = $workshops;
                     break;
+
+                case "sumreport":
+                    $sql = "SELECT count(doctor.id) as num, doctor.speciality as spec from user_customer
+                    Join doctor on user_customer.customer_id=doctor.customer_id
+                    Where user_customer.user_id={$userId}
+                    Group by doctor.speciality";
+                    $sumreport = DB::select($sql);
+                    $data['sumreport'] = $sumreport;
+
+                    $sql = "SELECT count(doctor.id) as total from user_customer
+                    Join doctor on user_customer.customer_id=doctor.customer_id
+                    Where user_customer.user_id={$userId}";
+                    $sumreportTotal = DB::select($sql);
+                    $data['sumreportTotal'] = $sumreportTotal;
+                break;
             }
 
             return $data;
