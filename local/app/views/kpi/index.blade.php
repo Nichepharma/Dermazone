@@ -35,7 +35,28 @@
                 <div id="chart_div"></div>
             </div>
 
+            <div class="col-sm-12 graphContainer">
 
+                <table st-safe-src="sumreportCollectionTotal" st-table="displaysumreportCollectionTotal" class="table table-striped table-bordered"
+                       id="sumreportTable">
+                    <thead>
+                    <tr>
+                        <th st-sort="test">Product Name</th>
+                        <th st-sort="test">Number Of Samples</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                      @foreach($data['sumreport'] as $row)
+                      <tr>
+                          <th st-sort="spec">{{$row->product_name}}</th>
+                          <th st-sort="num">{{$row->sum}}</th>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                </table>
+
+            </div>
             <!--
             <div class="col-sm-6">
             <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
@@ -170,16 +191,14 @@
 
     <script language="javascript">
         var app = angular.module('myApp', []);
+        app.config(function ($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+        });
 
-
-        function gridCtrl($scope) {
-            scope.helloMessage = "Hello ";
-        }
-        alert('done');
+        app.controller('gridCtrl',  function ($scope) {
+            $scope.helloMessage = "Hello Test ";
+        });
     </script>
-
-    <div ng-controller='gridCtrl'>
-        <h1>{{helloMessage}}, world </h1>
-    </div>
 
 @stop

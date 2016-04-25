@@ -9,8 +9,11 @@
 @section('content')
     <div class="container-fluid page-content1">
 
+        @if($data['canImport'] == true)
         @include('others.print_buttons',['moreLinks'=>'<a class="btn bg-primary btn-sm" data-toggle="modal" data-target="#myModal">import</a>'])
-
+        @else
+        @include('others.print_buttons')
+        @endif
         <div class="col-sm-12">
             <table st-safe-src="doctorsCollection" st-table="displayDoctorsCollection" class="table table-striped table-bordered" id="doctorsTable">
                 <thead>

@@ -20,6 +20,7 @@ class CustomersController extends BaseController
 
     public function getIndex()
     {
+        $this->data['page_title'] = 'All Customers';
 
         if (Input::has('type')) {
 
@@ -64,7 +65,11 @@ class CustomersController extends BaseController
             return $data;
         }
 
-
+        if(UserRole::where('user_id', $this->data['user']->id)->get(['role_id'])[0]->role_id == 6){
+          $this->data['canImport'] = true;
+        }else {
+          $this->data['canImport'] = false;
+        }
         return View::make($this->data['modules'] . '.index', ['data' => $this->data]);
     }
 
@@ -85,6 +90,7 @@ class CustomersController extends BaseController
     public function getDoctor($customerId)
     {
         $this->data['record'] = Doctor::where('customer_id',$customerId)->first();
+        $this->data['page_title'] = 'Doctor: '.$this->data['record']->name;
 
         $customer = Customer::find($customerId, ['province_id', 'city_id', 'area_id']);
         if (!empty($customer->province_id)) {
@@ -109,6 +115,7 @@ class CustomersController extends BaseController
     public function getPharmacy($customerId)
     {
         $this->data['record'] = Pharmacy::where('customer_id',$customerId)->first();
+        $this->data['page_title'] = 'Pharmacy: '.$this->data['record']->name;
 
         $customer = Customer::find($customerId, ['province_id', 'city_id', 'area_id']);
         if (!empty($customer->province_id)) {
@@ -162,6 +169,7 @@ class CustomersController extends BaseController
         switch ($this->data['customer']->type) {
             case 1:
                 $this->data['doctor'] = Doctor::where('customer_id',$this->data['customer']->id)->first();
+                $this->data['page_title'] = 'Visit for Doctor: '.$this->data['record']->name;
                 return View::make($this->data['modules'] . '.doctor_visit', ['data' => $this->data]);
                 break;
             case 2:
@@ -299,160 +307,160 @@ class CustomersController extends BaseController
         return View::make($this->data['modules'] . '.import', ['data' => $this->data]);
     }
 
-  public function modifySpec($sp){
-   //if there is a dots abbrevations remove them
-
-   if (strpos($sp,'.') !== false){
-    $sp = str_replace(".", "", $sp);
-
-   }
-   if(stripos($sp, 'res') === 0){
-        $sp = str_replace("res", "", $sp);
-   }
-   if(stripos($sp, 'reg') === 0){
-        $sp = str_replace("reg", "", $sp);
-   }
-    $sp = trim($sp);
-
-   // check thta or is on the beginning of the string
-  if(stripos($sp, 'or') === 0){
-  return "ORS";
-  }
-  elseif(stripos($a,'code') !== false ){
-  return "NO CODE";
-  }
-  elseif(stripos($sp, 'u') === 0){
-  return "U";
-  }
-
-  elseif(stripos($sp, 's') === 0 || stripos($sp, 'gs') === 0 || (stripos($sp, 'g') === 0 && stripos($sp, 'su') !== false)) {
-  return "S";
-  }
-  elseif(stripos($sp, 'gy') === 0 || stripos($sp, 'ob') === 0){
-  return "GYN";
-  }
-  elseif(stripos($sp, 'PU') === 0 || stripos($sp, 'ch') === 0 || stripos($sp, 'resp') === 0 || stripos($sp, 'Pn') === 0 ){
-  return "PUD";
-  }
-   elseif(stripos($sp, 'family') !== false || stripos($sp, 'F') === 0){
-  return "FP";
-  }
-  elseif(stripos($sp, 'ent') === 0 || stripos($sp, 'e n') === 0 || stripos($sp, 'ear') === 0 || stripos($sp, 'ORT') === 0 || stripos($sp, 'OTo') === 0){
-  return "ENT";
-  }
-
-  elseif(stripos($sp, 'Den') !== false || stripos($sp, 'oral') !== false || stripos($sp, 'dont') !== false || stripos($sp, 'Dn') === 0){
-  return "DEN";
-  }
-
-  // general practitioner
-  //
-  elseif(stripos($sp, "gp") === 0 || stripos($sp, "gb") === 0 ||(stripos($sp, 'gener') !== false && (stripos($sp, 's') === false || stripos($sp, 'phys') !== false || stripos($sp, 'scop') !== false))){
-  return "GP";
-  }
-  // internal medicine
-  elseif(stripos($sp, 'im') === 0 || stripos($sp, 'int') !== false){
-  return "IM";
-  }
-  elseif(stripos($sp, 'Rh') === 0 || stripos($sp, 'Ru') === 0){
-  return "RHU";
-  }
-
-  elseif(stripos($sp, 'PD') !== false || stripos($sp, 'Ped') === 0 || stripos($sp, "paed") === 0|| stripos($sp, "pead") === 0){
-  return "PD";
-  }
-
-  //check there is  no overlapping with immunity
-  //infection disease
-
-   elseif(stripos($sp, 'i') === 0 && stripos($sp, 'im') == false && stripos($sp, 'ig') == false &&  stripos($sp, 'int') == false && stripos($sp, 'ic') == false){
-  return "ID";
-  }
-  // no overlapping with NS
-  //neuro
-
-  elseif(stripos($sp, 'N') === 0 && stripos($sp, 'sur') == false && stripos($sp, 'Ns') !== 0 && stripos($sp, 'nep') !== 0){
-  return "N";
-  }
-
-   elseif(stripos($sp, "ns") === 0||(stripos($sp, 'N') === 0 && stripos($sp, 'sur') !== false) ){
-  return "NS";
-  }
-   elseif(stripos($sp, 'end') === 0 ){
-  return "END";
-  }
-   elseif(stripos($sp, 'an') === 0 ){
-  return "AN";
-  }
-   elseif(stripos($sp, 'cc') === 0 || stripos($sp, 'care') !== false || stripos($sp, 'ic') === 0){
-  return "CCU";
-  }
-  elseif(stripos($sp, 'car') === 0 || stripos($sp, 'CD') === 0 || stripos($sp, 'crd') === 0){
-  return "CD";
-  }
-  elseif(strcasecmp($sp, "ntr") == 0|| stripos($sp, 'nu') === 0 || stripos($sp, 'diet') !== false){
-  return "NTR";
-  }
-  elseif(strcasecmp($sp, "ge") == 0 || stripos($sp, 'Ga') === 0 || stripos($sp, 'GIT') !== false || strcasecmp($sp, "gi") == 0 ){
-  return "GE";
-  }
-  //immunity
-   elseif(strcasecmp($sp, "ig") == 0 || stripos($sp, 'imm') === 0 ){
-  return "IG";
-  }
-   elseif(stripos($sp, 'dia') === 0 ){
-  return "DIA";
-  }
-  //plastic surgeon
-  elseif(strcasecmp($sp, "ps") == 0 || stripos($sp, 'PL') === 0 || stripos($sp, 'cos') === 0){
-  return "PS";
-  }
-  elseif(stripos($sp, 'OP') === 0 ){
-  return "OPH";
-  }
-  elseif(strcasecmp($sp, "vs") == 0 ||  (stripos($sp, 'v') === 0 &&  stripos($sp, 'sur') !== false )){
-  return "VS";
-  }
-  elseif(strcasecmp($sp, "v") == 0 ||  (stripos($sp, 'v') === 0 &&  stripos($sp, 'sur') == false )){
-  return "V";
-  }
-  elseif(stripos($sp, 'em') === 0 || strcasecmp($sp, "er") == 0 ){
-  return "EM";
-  }
-  elseif(stripos($sp, 'nep') === 0 ){
-  return "NEP";
-  }
-  //psychiatric
-   elseif(strcasecmp($sp, "p") == 0 ||  stripos($sp, 'psy') === 0 ){
-  return "P";
-  }
-   elseif(stripos($sp, 'ph') === 0 ){
-  return "PH";
-  }
-    elseif(strcasecmp($sp, "D") == 0 || stripos($sp, 'Der') !== false || strcasecmp($sp, "Dr") == 0 ){
-  return "D";
-  }
-  // we did write in on database
-  else  if(stripos($sp, 'tr') === 0){
-  return "TRS";
-  }
-    else  if(stripos($sp, 'h') === 0){
-  return "HEM";
-  }
-
-   else  if(stripos($sp, 'micro') === 0 || strcasecmp($sp, "mm") == 0 ){
-  return "MM";
-  }
-   elseif(stripos($sp, 'on') === 0 ){
-  return "ON";
-  }
-   elseif(stripos($sp, 'med') === 0 ){
-  return "MED";
-  }
-  else
-   return "No Code";
 
 }
 
+function modifySpec($sp){
+ //if there is a dots abbrevations remove them
+
+ if (strpos($sp,'.') !== false){
+  $sp = str_replace(".", "", $sp);
+
+ }
+ if(stripos($sp, 'res') === 0){
+      $sp = str_replace("res", "", $sp);
+ }
+ if(stripos($sp, 'reg') === 0){
+      $sp = str_replace("reg", "", $sp);
+ }
+  $sp = trim($sp);
+
+ // check thta or is on the beginning of the string
+if(stripos($sp, 'or') === 0){
+return "ORS";
+}
+elseif(stripos($a,'code') !== false ){
+return "NO CODE";
+}
+elseif(stripos($sp, 'u') === 0){
+return "U";
+}
+
+elseif(stripos($sp, 's') === 0 || stripos($sp, 'gs') === 0 || (stripos($sp, 'g') === 0 && stripos($sp, 'su') !== false)) {
+return "S";
+}
+elseif(stripos($sp, 'gy') === 0 || stripos($sp, 'ob') === 0){
+return "GYN";
+}
+elseif(stripos($sp, 'PU') === 0 || stripos($sp, 'ch') === 0 || stripos($sp, 'resp') === 0 || stripos($sp, 'Pn') === 0 ){
+return "PUD";
+}
+ elseif(stripos($sp, 'family') !== false || stripos($sp, 'F') === 0){
+return "FP";
+}
+elseif(stripos($sp, 'ent') === 0 || stripos($sp, 'e n') === 0 || stripos($sp, 'ear') === 0 || stripos($sp, 'ORT') === 0 || stripos($sp, 'OTo') === 0){
+return "ENT";
+}
+
+elseif(stripos($sp, 'Den') !== false || stripos($sp, 'oral') !== false || stripos($sp, 'dont') !== false || stripos($sp, 'Dn') === 0){
+return "DEN";
+}
+
+// general practitioner
+//
+elseif(stripos($sp, "gp") === 0 || stripos($sp, "gb") === 0 ||(stripos($sp, 'gener') !== false && (stripos($sp, 's') === false || stripos($sp, 'phys') !== false || stripos($sp, 'scop') !== false))){
+return "GP";
+}
+// internal medicine
+elseif(stripos($sp, 'im') === 0 || stripos($sp, 'int') !== false){
+return "IM";
+}
+elseif(stripos($sp, 'Rh') === 0 || stripos($sp, 'Ru') === 0){
+return "RHU";
+}
+
+elseif(stripos($sp, 'PD') !== false || stripos($sp, 'Ped') === 0 || stripos($sp, "paed") === 0|| stripos($sp, "pead") === 0){
+return "PD";
+}
+
+//check there is  no overlapping with immunity
+//infection disease
+
+ elseif(stripos($sp, 'i') === 0 && stripos($sp, 'im') == false && stripos($sp, 'ig') == false &&  stripos($sp, 'int') == false && stripos($sp, 'ic') == false){
+return "ID";
+}
+// no overlapping with NS
+//neuro
+
+elseif(stripos($sp, 'N') === 0 && stripos($sp, 'sur') == false && stripos($sp, 'Ns') !== 0 && stripos($sp, 'nep') !== 0){
+return "N";
+}
+
+ elseif(stripos($sp, "ns") === 0||(stripos($sp, 'N') === 0 && stripos($sp, 'sur') !== false) ){
+return "NS";
+}
+ elseif(stripos($sp, 'end') === 0 ){
+return "END";
+}
+ elseif(stripos($sp, 'an') === 0 ){
+return "AN";
+}
+ elseif(stripos($sp, 'cc') === 0 || stripos($sp, 'care') !== false || stripos($sp, 'ic') === 0){
+return "CCU";
+}
+elseif(stripos($sp, 'car') === 0 || stripos($sp, 'CD') === 0 || stripos($sp, 'crd') === 0){
+return "CD";
+}
+elseif(strcasecmp($sp, "ntr") == 0|| stripos($sp, 'nu') === 0 || stripos($sp, 'diet') !== false){
+return "NTR";
+}
+elseif(strcasecmp($sp, "ge") == 0 || stripos($sp, 'Ga') === 0 || stripos($sp, 'GIT') !== false || strcasecmp($sp, "gi") == 0 ){
+return "GE";
+}
+//immunity
+ elseif(strcasecmp($sp, "ig") == 0 || stripos($sp, 'imm') === 0 ){
+return "IG";
+}
+ elseif(stripos($sp, 'dia') === 0 ){
+return "DIA";
+}
+//plastic surgeon
+elseif(strcasecmp($sp, "ps") == 0 || stripos($sp, 'PL') === 0 || stripos($sp, 'cos') === 0){
+return "PS";
+}
+elseif(stripos($sp, 'OP') === 0 ){
+return "OPH";
+}
+elseif(strcasecmp($sp, "vs") == 0 ||  (stripos($sp, 'v') === 0 &&  stripos($sp, 'sur') !== false )){
+return "VS";
+}
+elseif(strcasecmp($sp, "v") == 0 ||  (stripos($sp, 'v') === 0 &&  stripos($sp, 'sur') == false )){
+return "V";
+}
+elseif(stripos($sp, 'em') === 0 || strcasecmp($sp, "er") == 0 ){
+return "EM";
+}
+elseif(stripos($sp, 'nep') === 0 ){
+return "NEP";
+}
+//psychiatric
+ elseif(strcasecmp($sp, "p") == 0 ||  stripos($sp, 'psy') === 0 ){
+return "P";
+}
+ elseif(stripos($sp, 'ph') === 0 ){
+return "PH";
+}
+  elseif(strcasecmp($sp, "D") == 0 || stripos($sp, 'Der') !== false || strcasecmp($sp, "Dr") == 0 ){
+return "D";
+}
+// we did write in on database
+else  if(stripos($sp, 'tr') === 0){
+return "TRS";
+}
+  else  if(stripos($sp, 'h') === 0){
+return "HEM";
+}
+
+ else  if(stripos($sp, 'micro') === 0 || strcasecmp($sp, "mm") == 0 ){
+return "MM";
+}
+ elseif(stripos($sp, 'on') === 0 ){
+return "ON";
+}
+ elseif(stripos($sp, 'med') === 0 ){
+return "MED";
+}
+else
+ return "No Code";
 
 }

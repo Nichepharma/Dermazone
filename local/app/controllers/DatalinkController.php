@@ -112,39 +112,50 @@ class DatalinkController extends BaseController
           return ireturn("", $data_iOS->workshop_date);
 
         case 'insert_visit':
-          $visit = new Visit;
-          $visit->user_id = $data_iOS->user_id;
+          //$visit = new Visit;
+          //$visit->user_id = $data_iOS->user_id;
 
-          $visit->customer_id = $data_iOS->customer_id;
+          //$visit->customer_id = $data_iOS->customer_id;
           $visit_customers = explode("|", $data_iOS->customer_id);
           $acc_times = explode("|", $data_iOS->acc);
 
-          //Getting Current Visit ID
-          $visit_id = DB::select("SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . Config::get('database.connections.mysql.database')  . "' AND TABLE_NAME = 'visit'");
-          $visit_id = $visit_id[0]->AUTO_INCREMENT;
-
           foreach ($visit_customers as $visit_customer) {
+
+            //Getting Next Visit ID
+            $visit_id = DB::select("SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . Config::get('database.connections.mysql.database')  . "' AND TABLE_NAME = 'visit'");
+            $visit_id = $visit_id[0]->AUTO_INCREMENT;
+            
             $visitcustomer = new VisitCustomer;
             $visitcustomer->visit_id = $visit_id;
             $visitcustomer->customer_id = $visit_customer;
             $visitcustomer->save();
+
+            //Temporary Add each call as a seperate visit
+
+            //Creating new Text Row for Each Customer
+            $visit = new Visit;
+            $visit->user_id = $data_iOS->user_id;
+            $visit->customer_id = $visit_customer;
+            $visit->product_id = $data_iOS->product_id;
+            $visit->date = date("Y-m-d H:i:s", strtotime($data_iOS->visit_date));
+            $visit->duration = $data_iOS->duration;
+            $visit->samples = $data_iOS->sample;
+            $visit->device = $data_iOS->device;
+            $visit->comment = $data_iOS->comment;
+            $visit->save();
+
+            //Each Silde Statistics per each visit
+            $slide=0;
+            foreach ($acc_times as $acc_time) {
+              $visitslide = new VisitSlide;
+              $visitslide->visit_id = $visit_id;
+              $visitslide->slide_id = $slide++;
+              $visitslide->product_id = $data_iOS->product_id;
+              $visitslide->time = $acc_time;
+              $visitslide->save();
+            }
           }
-          $slide=0;
-          foreach ($acc_times as $acc_time) {
-            $visitslide = new VisitSlide;
-            $visitslide->visit_id = $visit_id;
-            $visitslide->slide_id = $slide++;
-            $visitslide->product_id = $data_iOS->product_id;
-            $visitslide->time = $acc_time;
-            $visitslide->save();
-          }
-          $visit->product_id = $data_iOS->product_id;
-          $visit->date = date("Y-m-d H:i:s", strtotime($data_iOS->visit_date));
-          $visit->duration = $data_iOS->duration;
-          $visit->samples = $data_iOS->sample;
-          $visit->device = $data_iOS->device;
-          $visit->comment = $data_iOS->comment;
-          $visit->save();
+
           return ireturn("", $data_iOS->visit_date);
 
         case 'insert_plan':
