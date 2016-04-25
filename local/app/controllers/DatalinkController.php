@@ -67,6 +67,19 @@ class DatalinkController extends BaseController
             //{"id":"1","user_id":"2","customer_id":"1","type":"1","province_id":"1","city_id":"1","area_id":"0","created_at":"2016-04-06 05:12:23","updated_at":"2016-04-06 05:12:23","name":"Anas Gobran","speciality":"Purchaser","grade":"B","address":null,"phone":null,"email":null,"center":"Medica  Center ","best_time":null},
             return ireturn(json_encode($customers));
 
+            case 'get_promoters':
+              $sql = "SELECT productp_id,qnt,date
+                FROM promoter
+                WHERE user_id={$data_iOS->user_id}
+                AND date BETWEEN '{$data_iOS->from}' AND '{$data_iOS->to}'";
+
+              $result = DB::select($sql);
+              return ireturn(json_encode($result));
+
+          case 'get_productps':
+            $productps = DB::table('productp')->get();
+            return ireturn(json_encode($productps));
+
           case 'get_messages':
             $sql = "SELECT message.id as msgid, message.message as msg, user.fullname as Sender, message.date as noti_Date
               FROM message
@@ -124,7 +137,7 @@ class DatalinkController extends BaseController
             //Getting Next Visit ID
             $visit_id = DB::select("SELECT `AUTO_INCREMENT` FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = '" . Config::get('database.connections.mysql.database')  . "' AND TABLE_NAME = 'visit'");
             $visit_id = $visit_id[0]->AUTO_INCREMENT;
-            
+
             $visitcustomer = new VisitCustomer;
             $visitcustomer->visit_id = $visit_id;
             $visitcustomer->customer_id = $visit_customer;
@@ -181,6 +194,23 @@ class DatalinkController extends BaseController
           $visitplan->save();
         }
         return ireturn("", "saved");
+
+        case 'insert_promoter':
+          $user_id = $data_iOS->user_id;
+
+          $productps = explode("|", $data_iOS->productps);
+          $qnts = explode("|", $data_iOS->qnts);
+          $dates = explode("|", $data_iOS->dates);
+
+          foreach ($dates as $key => $date) {
+            $promoter = new Promoter;
+            $promoter->user_id = $user_id;
+            $promoter->productp_id = $productps[$key];
+            $promoter->qnt = $qnts[$key];
+            $promoter->date = $dates[$key];
+            $promoter->save();
+          }
+          return ireturn("", "saved");
 
         case 'test':
           return json_encode("4");

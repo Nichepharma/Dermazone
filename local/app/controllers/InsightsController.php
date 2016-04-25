@@ -782,6 +782,17 @@ class InsightsController extends BaseController
                     $data['workshops'] = $workshops;
                     break;
 
+                case 'promoters':
+
+                    $sql = "SELECT *,productp.name as product_name from promoter
+                    JOIN productp on promoter.productp_id=productp.id
+                    Where promoter.user_id ={$userId}
+                    AND DATE(promoter.date) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'
+                    Order By Date desc";
+                    $promoters = DB::select($sql);
+                    $data['promoters'] = $promoters;
+                    break;
+
                 case "sumreport":
                     $sql = "SELECT count(doctor.id) as num, doctor.speciality as spec from user_customer
                     Join doctor on user_customer.customer_id=doctor.customer_id
@@ -816,6 +827,11 @@ class InsightsController extends BaseController
         $lastMonth = date('n', strtotime($this->data['endDate']));
         if (!isset($this->data['months'][$lastMonth])) {
             $this->data['months'][$lastMonth] = date('M Y', strtotime($this->data['endDate']));
+        }
+
+
+        if(UserRole::where('user_id', $userId)->get(['role_id'])[0]->role_id == 10){
+          $this->data['IsPromoter'] = true;
         }
 
         return View::make($this->data['modules'] . '.accumlative_details', ['data' => $this->data]);

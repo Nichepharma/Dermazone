@@ -14,6 +14,12 @@
 
         <h2><i class="glyphicon glyphicon-user"></i> {{$data['userData']->fullname}}</h2>
         <div class='row'>
+
+          @if($data['IsPromoter'] == true)
+            <div class="col-md-2 col-xs-6">
+                <button class="buttonallsite3" ng-class="{'active': activeTab=='promoters'}" ng-click="showPromoters()">Sales In Details</button>
+            </div>
+          @else
             <div class="col-md-2 col-xs-6">
                 <button class="buttonallsite3" ng-class="{'active': activeTab=='doctors'}" ng-click="showDoctors()">Private Market</button>
             </div>
@@ -27,12 +33,14 @@
             </div>
 
             <div class="col-md-2 col-xs-6">
-                <button class="buttonallsite3" ng-class="{'active': activeTab=='pharms'}" ng-click="showWorkshops()">Workshops</button>
+                <button class="buttonallsite3" ng-class="{'active': activeTab=='workshops'}" ng-click="showWorkshops()">Workshops</button>
             </div>
 
             <div class="col-md-2 col-xs-6">
-                <button class="buttonallsite3" ng-class="{'active': activeTab=='pharms'}" ng-click="showSumReport()">Summary Report</button>
+                <button class="buttonallsite3" ng-class="{'active': activeTab=='sumreport'}" ng-click="showSumReport()">Summary Report</button>
             </div>
+
+          @endif
         </div>
 
         <div class="col-sm-12">
@@ -273,6 +281,42 @@
                 </tbody>
             </table>
 
+            <table st-safe-src="promotersCollection" st-table="displaypromotersCollection" class="table table-striped table-bordered"
+                   id="promotersTable">
+                <thead>
+                <tr>
+                    <th st-sort="test">#</th>
+                    <th st-sort="test">Date</th>
+                    <th st-sort="test">Product</th>
+                    <th st-sort="test">Price</th>
+                    <th st-sort="test">Quantity</th>
+                    <th st-sort="test">Total</th>
+
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in displaypromotersCollection">
+                    <td>[[$index+1]]</td>
+                    <td>[[row.date]]</td>
+                    <td>[[row.product_name]]</td>
+                    <td>[[row.price]]</td>
+                    <td>[[row.qnt]]</td>
+                    <td>[[row.qnt * row.price]]</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th st-sort="test">Total</th>
+                    <th st-sort="test"></th>
+                    <th st-sort="test"></th>
+                    <th st-sort="test"></th>
+                    <th st-sort="test"></th>
+                    <th st-sort="test">[[getPromotersTotal()]]</th>
+                </tr>
+              </tfoot>
+            </table>
+
             <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
                    id="sumreportTable">
                 <thead>
@@ -289,10 +333,10 @@
                 </tr>
                 </tbody>
                 <tfoot>
-                <tr ng-repeat="row in displaysumreportCollectionTotal">
+                  <tr ng-repeat="row in displaysumreportCollectionTotal">
                     <th st-sort="test">Total</th>
                     <th st-sort="test">[[row.total]]</th>
-                </tr>
+                  </tr>
               </tfoot>
             </table>
         </div>
@@ -414,7 +458,36 @@
                 }
             };
 
+            scope.showPromoters = function () {
+                $('.table').hide();
+                scope.activeTab = 'promoters';
+                if (typeof (scope.promotersCollection) === 'undefined') {
+                    $http.get('{{url('insights/accumulative-details/'.$data['userData']->id.'?type=promoters')}}')
+                            .then(function (response) {
+                                scope.promotersCollection = response.data.promoters;
+                                scope.displaypromotersCollection = [].concat(scope.promotersCollection);
+                                //scope.areas = angular.fromJson(response.data.areas);
+                                $('#promotersTable').fadeIn();
+                            });
+                } else {
+                    $('#promotersTable').fadeIn();
+                }
+            };
+
+            scope.getPromotersTotal = function(){
+                var total = 0;
+                for(var i = 0; i < scope.displaypromotersCollection.length; i++){
+                    var product = scope.displaypromotersCollection[i];
+                    total += (product.price * product.qnt);;
+                }
+                return total;
+            }
+
+            @if($data['IsPromoter'] == true)
+            scope.showPromoters();
+            @else
             scope.showDoctors();
+            @endif
 
         }]);
 
