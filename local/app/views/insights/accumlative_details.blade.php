@@ -286,12 +286,36 @@
                 <thead>
                 <tr>
                     <th st-sort="test">#</th>
-                    <th st-sort="test">Date</th>
-                    <th st-sort="test">Product</th>
+                    <th st-sort="date">Date</th>
+                    <th st-sort="cat">Category</th>
+                    <th st-sort="product_name">Product</th>
                     <th st-sort="test">Price</th>
                     <th st-sort="test">Quantity</th>
                     <th st-sort="test">Total</th>
-
+                </tr>
+                <tr>
+                  <th></th>
+                  <th>
+                      <select st-search="date" class="form-control">
+                          <option value="">- All -</option>
+                          <option ng-repeat="row in promotersCollection | unique:'date'" value="[[row.date]]">[[row.date]]</option>
+                      </select>
+                  </th>
+                  <th>
+                      <select st-search="cat" class="form-control">
+                          <option value="">- All -</option>
+                          <option ng-repeat="row in promotersCollection | unique:'cat'" value="[[row.cat]]">[[row.cat]]</option>
+                      </select>
+                  </th>
+                  <th>
+                      <select st-search="product_name" class="form-control">
+                          <option value="">- All -</option>
+                          <option ng-repeat="row in promotersCollection | unique:'product_name'" value="[[row.product_name]]">[[row.product_name]]</option>
+                      </select>
+                  </th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
                 </tr>
 
                 </thead>
@@ -299,6 +323,7 @@
                 <tr ng-repeat="row in displaypromotersCollection">
                     <td>[[$index+1]]</td>
                     <td>[[row.date]]</td>
+                    <td>[[row.cat]]</td>
                     <td>[[row.product_name]]</td>
                     <td>[[row.price]]</td>
                     <td>[[row.qnt]]</td>
@@ -307,11 +332,12 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th st-sort="test">Total</th>
                     <th st-sort="test"></th>
                     <th st-sort="test"></th>
                     <th st-sort="test"></th>
                     <th st-sort="test"></th>
+                    <th st-sort="test"></th>
+                    <th st-sort="test">Total : </th>
                     <th st-sort="test">[[getPromotersTotal()]]</th>
                 </tr>
               </tfoot>

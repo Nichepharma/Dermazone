@@ -784,8 +784,9 @@ class InsightsController extends BaseController
 
                 case 'promoters':
 
-                    $sql = "SELECT *,productp.name as product_name from promoter
+                    $sql = "SELECT *,productp.name as product_name,productp_cat.name as cat from promoter
                     JOIN productp on promoter.productp_id=productp.id
+                    Join productp_cat on productp.cat = productp_cat.id
                     Where promoter.user_id ={$userId}
                     AND DATE(promoter.date) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'
                     Order By Date desc";

@@ -77,8 +77,17 @@ class DatalinkController extends BaseController
               return ireturn(json_encode($result));
 
           case 'get_productps':
-            $productps = DB::table('productp')->get();
-            return ireturn(json_encode($productps));
+            $sql = "SELECT *,productp.id as id,productp.name as name,productp_cat.name as cat
+              FROM productp
+              Join productp_cat on productp.cat=productp_cat.id";
+
+            $result = DB::select($sql);
+            return ireturn(json_encode($result));
+
+            //$productps = DB::table('productp')
+            //->join('productp_cat' , 'productp.cat' , '=' , 'productp_cat.id')
+            //->get();
+            //return ireturn(json_encode($productps));
 
           case 'get_messages':
             $sql = "SELECT message.id as msgid, message.message as msg, user.fullname as Sender, message.date as noti_Date
