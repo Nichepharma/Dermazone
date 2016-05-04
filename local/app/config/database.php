@@ -62,7 +62,7 @@ return array(
 //
 
 			'host'      => 'localhost',
-			'database'  => 'nichepha_newTacit',
+			'database'  => 'nichepha_dermazone',
 			'username'  => 'nichepha_newUser',
 			'password'  => 'i9fW{*AD5U@S',
 
