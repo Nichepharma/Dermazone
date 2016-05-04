@@ -119,7 +119,7 @@ class InsightsController extends BaseController
         foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
             $total_duration = 0;
             foreach ($slideVisits as $slideVisit) {
-              $total_duration += $slideVisit->time;
+                $total_duration += $slideVisit->time;
             }
             if (isset($slides[$slideId])) {
                 $this->data['slides'][$slides[$slideId]] += $total_duration;
@@ -207,15 +207,15 @@ class InsightsController extends BaseController
         $calls = $calls->join('visit_slide', 'visit.id', '=', 'visit_slide.visit_id')
             ->get(['visit_slide.time', 'visit_slide.slide_id']);
 
-            foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
-                $total_duration = 0;
-                foreach ($slideVisits as $slideVisit) {
-                  $total_duration += $slideVisit->time;
-                }
-                if (isset($slides[$slideId])) {
-                    $this->data['slides'][$slides[$slideId]] += $total_duration;
-                }
+        foreach (arrayGroupBy($calls, 'slide_id') as $slideId => $slideVisits) {
+            $total_duration = 0;
+            foreach ($slideVisits as $slideVisit) {
+                $total_duration += $slideVisit->time;
             }
+            if (isset($slides[$slideId])) {
+                $this->data['slides'][$slides[$slideId]] += $total_duration;
+            }
+        }
 
         return View::make($this->data['modules'] . '.product_doctors', ['data' => $this->data]);
     }
@@ -649,6 +649,7 @@ class InsightsController extends BaseController
                     $visits = DB::select($sql);
                     $visits = arrayGroupBy($visits, 'customer_id'); // group by customer to prevent repeating
                     foreach($visits as $customerId=>$customerVisits){
+                        $visitsDetails = [];
                         // collect customer Visits
                         foreach($customerVisits as $visit){
                             $visitsDetails[] = array(
@@ -695,6 +696,7 @@ class InsightsController extends BaseController
                     $visits = arrayGroupBy($visits, 'customer_id'); // group by customer to prevent repeating
 
                     foreach($visits as $customerId=>$customerVisits){
+                        $visitsDetails = [];
                         // collect customer Visits
                         foreach($customerVisits as $visit){
                             $visitsDetails[] = array(
@@ -731,17 +733,19 @@ class InsightsController extends BaseController
 											WEEK(`visit`.`date`, 5) - WEEK(DATE_SUB(`visit`.`date`, INTERVAL DAYOFMONTH(`visit`.`date`) - 1 DAY), 5) + 1 as week
 											FROM `pharmacy`
 											JOIN `user_customer`
-											ON `user_customer`.`customer_id`=`pharmacy`.`id`
+											ON `user_customer`.`customer_id`=`pharmacy`.`customer_id`
 											JOIN `visit`
 											ON `visit`.`customer_id`=`pharmacy`.`customer_id`
 											JOIN `customer`
 											ON `customer`.`id`=`pharmacy`.`customer_id`
 											WHERE `user_customer`.`user_id`=$userId
+                      AND visit.user_id =$userId
 											AND DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'";
                     $visits = DB::select($sql);
                     $visits = arrayGroupBy($visits, 'customer_id'); // group by customer to prevent repeating
 
                     foreach($visits as $customerId=>$customerVisits){
+                        $visitsDetails = [];
                         // collect customer Visits
                         foreach($customerVisits as $visit){
                             $visitsDetails[] = array(
@@ -807,7 +811,7 @@ class InsightsController extends BaseController
                     Where user_customer.user_id={$userId}";
                     $sumreportTotal = DB::select($sql);
                     $data['sumreportTotal'] = $sumreportTotal;
-                break;
+                    break;
             }
 
             return $data;
@@ -832,7 +836,7 @@ class InsightsController extends BaseController
 
 
         if(UserRole::where('user_id', $userId)->get(['role_id'])[0]->role_id == 10){
-          $this->data['IsPromoter'] = true;
+            $this->data['IsPromoter'] = true;
         }
 
         return View::make($this->data['modules'] . '.accumlative_details', ['data' => $this->data]);
@@ -907,7 +911,7 @@ class InsightsController extends BaseController
 
             $this->data['provinceId'] = $provinceId;
             $reps = UserModel::where('province_id', $provinceId)->where('role_user.role_id', 3)
-            ->leftJoin('role_user', 'user.id', '=', 'role_user.user_id');
+                ->leftJoin('role_user', 'user.id', '=', 'role_user.user_id');
 
             if (!$this->data['user']->is('admin')) {
                 $reps = $reps->whereIn('user.id', $this->data['userChildren']);

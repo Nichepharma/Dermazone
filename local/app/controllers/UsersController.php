@@ -347,7 +347,6 @@ class UsersController extends BaseController
             $input = Input::all();
             $validation = Validator::make($input, ['identifier' => 'required', 'password' => 'required']);
             if ($validation->passes()) {
-
                 $user = UserModel::where(['email' => Input::get('identifier'), 'pass' => Input::get('password'), 'disabled' => 0])
                     ->orWhere(['username' => Input::get('identifier'), 'pass' => Input::get('password'), 'disabled' => 0])
                     ->first();
@@ -362,12 +361,29 @@ class UsersController extends BaseController
 
                     return Redirect::to($previous_url);
 
-                } else {
+                }else {
                     Session::flash('alert', 'danger');
                     Session::flash('message', 'Invalid username or password');
                 }
 
             }
+            else{
+            $validation = Validator::make($input, ['identifier' => 'required']);
+            if($validation->passes()){
+              $user = UserModel::where(['email' => Input::get('identifier'), 'disabled' => 0])
+                  ->orWhere(['username' => Input::get('identifier'), 'disabled' => 0])
+                  ->first();
+              if ($user) {
+                $msg = $message = "Your email address: {$user->email}\r\n Your username : {$user->username}\r\n Your password: {$user->pass}";
+                mail($user->email, 'Your Dermazone\'s Login Information', $msg);
+                Session::flash('alert', 'info');
+                Session::flash('message', 'Please check your email inbox to know your login information');
+              }else{
+              Session::flash('alert', 'danger');
+              Session::flash('message', 'Invalid username or email');
+              }
+            }
+          }
             return Redirect::back()->withInput($input)->withErrors($validation);
         }
 

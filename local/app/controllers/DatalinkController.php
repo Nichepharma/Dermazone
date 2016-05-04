@@ -50,22 +50,30 @@ class DatalinkController extends BaseController
           ->join('customer', 'user_customer.customer_id', '=', 'customer.id')
           ->join('doctor', 'customer.id', '=', 'doctor.customer_id')
           //->join('city', 'customer.city_id', '=', 'city.id')
+          ->select('customer.id' , 'doctor.name' , 'doctor.speciality' , 'doctor.center');
+
+          $customers_with_prospects = DB::table('customer')->whereBetween('customer.id', array(710, 714))
+          ->join('doctor', 'customer.id', '=', 'doctor.customer_id')
           ->select('customer.id' , 'doctor.name' , 'doctor.speciality' , 'doctor.center')
+          ->union($customers)
           ->get();
-          //full
-          //{"id":"1","user_id":"2","customer_id":"1","type":"1","province_id":"1","city_id":"1","area_id":"0","created_at":"2016-04-06 05:12:23","updated_at":"2016-04-06 05:12:23","name":"Anas Gobran","speciality":"Purchaser","grade":"B","address":null,"phone":null,"email":null,"center":"Medica  Center ","best_time":null},
-          return ireturn(json_encode($customers));
+
+          return ireturn(json_encode($customers_with_prospects));
 
           case 'get_phs':
             $customers = DB::table('user_customer')->where('user_id' , $data_iOS->rep_id)
             ->join('customer', 'user_customer.customer_id', '=', 'customer.id')
             ->join('pharmacy', 'customer.id', '=', 'pharmacy.customer_id')
             //->join('city', 'customer.city_id', '=', 'city.id')
+            ->select('customer.id' , 'pharmacy.name' , 'pharmacy.center');
+
+            $customers_with_prospects = DB::table('customer')->whereBetween('customer.id', array(715, 719))
+            ->join('pharmacy', 'customer.id', '=', 'pharmacy.customer_id')
             ->select('customer.id' , 'pharmacy.name' , 'pharmacy.center')
+            ->union($customers)
             ->get();
-            //full
-            //{"id":"1","user_id":"2","customer_id":"1","type":"1","province_id":"1","city_id":"1","area_id":"0","created_at":"2016-04-06 05:12:23","updated_at":"2016-04-06 05:12:23","name":"Anas Gobran","speciality":"Purchaser","grade":"B","address":null,"phone":null,"email":null,"center":"Medica  Center ","best_time":null},
-            return ireturn(json_encode($customers));
+
+            return ireturn(json_encode($customers_with_prospects));
 
             case 'get_promoters':
               $sql = "SELECT productp_id,qnt,date
