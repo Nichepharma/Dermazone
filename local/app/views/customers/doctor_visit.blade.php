@@ -59,7 +59,7 @@
                 </div>
                 <div class="row toppart">
                     <div class="col-xs-6 cell">Visit Type</div>
-                    <div class="col-xs-6 callspart2cell2"> {{ str_replace("2","Double", str_replace("1", "Single", $data['visit']->visit_type)) }}</div>
+                    <div class="col-xs-6 callspart2cell2"> {{ str_replace("1","Double", str_replace("0", "Single", $data['visit']->visit_type)) }}</div>
                 </div>
                 <div class="row toppart">
                     <div class="col-xs-6 cell">Comment</div>
