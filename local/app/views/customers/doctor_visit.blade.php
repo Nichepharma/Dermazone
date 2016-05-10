@@ -54,6 +54,14 @@
                     <div class="col-xs-6 callspart2cell2"> {{$data['visit']->samples}}</div>
                 </div>
                 <div class="row toppart">
+                    <div class="col-xs-6 cell">Samples Type</div>
+                    <div class="col-xs-6 callspart2cell2"> {{$data['visit']->samples_type}}</div>
+                </div>
+                <div class="row toppart">
+                    <div class="col-xs-6 cell">Visit Type</div>
+                    <div class="col-xs-6 callspart2cell2"> {{ str_replace("2","Double", str_replace("1", "Single", $data['visit']->visit_type)) }}</div>
+                </div>
+                <div class="row toppart">
                     <div class="col-xs-6 cell">Comment</div>
                     <div class="col-xs-6 callspart2cell2"> {{$data['visit']->comment}}</div>
                 </div>

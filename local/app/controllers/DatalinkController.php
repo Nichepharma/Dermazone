@@ -170,7 +170,7 @@ class DatalinkController extends BaseController
             $visit->date = date("Y-m-d H:i:s", strtotime($data_iOS->visit_date));
             $visit->duration = $data_iOS->duration;
             $visit->samples = $data_iOS->sample;
-            $visit->samples = $data_iOS->samples_type;
+            $visit->samples_type = $data_iOS->samples_type;
             $visit->device = $data_iOS->device;
             $visit->visit_type = $data_iOS->visit_type;
             $visit->comment = $data_iOS->comment;
