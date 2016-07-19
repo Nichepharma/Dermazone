@@ -35,7 +35,7 @@
                 <div id="chart_div"></div>
             </div>
 
-            <div class="col-sm-12 graphContainer">
+            <div class="col-sm-8">
 
                 <table st-safe-src="sumreportCollectionTotal" st-table="displaysumreportCollectionTotal" class="table table-striped table-bordered"
                        id="sumreportTable">
@@ -53,6 +53,48 @@
                           <th st-sort="num">{{$row->sum}}</th>
                       </tr>
                       @endforeach
+                    </tbody>
+                </table>
+                <table class="table table-striped table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Product Name</test>
+                      <th>Samples Type</test>
+                      <th>Number of samples</test>
+                    </tr>
+                  </thead>
+                  <body>
+                    <?php $tmp="Nothing"; ?>
+                    @foreach($data['subsamples'] as $row)
+                    <tr>
+                      <?php
+                        if(($row->product_name != $tmp) || ($tmp=='Nothing')){
+                          echo "<th>{$row->product_name}</test>";
+                        }else{
+                          echo "<td></td>";
+                        }
+                        $tmp = $row->product_name;
+                      ?>
+                      <th>{{$row->samples_type}}</test>
+                      <th>{{$row->sum}}</test>
+                    </tr>
+                    @endforeach
+                  </body>
+                </table>
+                <table st-safe-src="sumreportCollectionTotal" st-table="displaysumreportCollectionTotal" class="table table-striped table-bordered"
+                       id="sumreportTable2">
+                    <thead>
+                    <tr>
+                        <th st-sort="test">Average Rep Rate</th>
+                        <th st-sort="test">This Rep Rate</th>
+                    </tr>
+
+                    </thead>
+                    <tbody>
+                      <tr>
+                          <th st-sort="spec">{{$data['rate_total'][0]->total}} visits per day</th>
+                          <th st-sort="spec">{{$data['rate_rep'][0]->total}} visits per day</th>
+                      </tr>
                     </tbody>
                 </table>
 

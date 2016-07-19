@@ -643,16 +643,6 @@ class InsightsController extends BaseController
                     $data['areas'] = json_encode(Area::lists('name', 'id'));
 
                     $sql = "SELECT DISTINCT `customer`.`id` as customer_id, `name`, `speciality`, `grade`,`customer`.`area_id`,
-                                              case
-                                              when exists (select id from user_customer
-                                                          where user_customer.customer_id = customer.id
-                                                          And user_customer.user_id=$userId)
-                                             then
-                                                  ''
-                                              else
-                                                  ' In-Active'
-                                              end
-                                              as status,
                                             MONTH (`visit`.`date`) as month, DAY (`visit`.`date`) as day,
 											WEEK(`visit`.`date`, 5) - WEEK(DATE_SUB(`visit`.`date`, INTERVAL DAYOFMONTH(`visit`.`date`) - 1 DAY), 5) + 1 as week
 											FROM `doctor`
@@ -661,8 +651,7 @@ class InsightsController extends BaseController
 											JOIN `customer`
 											ON `customer`.`id`=`doctor`.`customer_id`
 											WHERE `visit`.`user_id`=$userId
-											AND DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'
-                      ORDER BY status,name";
+											AND DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'";
                     $visits = DB::select($sql);
                     $visits = arrayGroupBy($visits, 'customer_id'); // group by customer to prevent repeating
                     foreach($visits as $customerId=>$customerVisits){
@@ -702,7 +691,6 @@ class InsightsController extends BaseController
                             'grade'=>$customerVisits[0]->grade,
                             'speciality'=>$customerVisits[0]->speciality,
                             'area_id'=>$customerVisits[0]->area_id,
-                            'status'=>$customerVisits[0]->status,
                             'n_visits'=>$n_visits,
                             'visits'=>$visitsDetails
                         );
@@ -716,8 +704,7 @@ class InsightsController extends BaseController
                             WHERE `user_customer`.`user_id`=$userId
                             AND `doctor`.`customer_id` NOT IN (SELECT DISTINCT `customer_id` from `visit`
                                                       WHERE user_id=$userId
-                                                      AND DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}')
-                            Order By name";
+                                                      AND DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}')";
                     $nonVisited = DB::select($sql);
                     $data['doctors'] = array_merge($visited,$nonVisited);
 
@@ -854,8 +841,7 @@ class InsightsController extends BaseController
 
                 case 'promoters':
 
-                    $sql = "SELECT promoter.date as date, promoter.price as price,promoter.qnt as qnt, productp.name as product_name,productp_cat.name as cat 
-                    from promoter
+                    $sql = "SELECT *,productp.name as product_name,productp_cat.name as cat from promoter
                     JOIN productp on promoter.productp_id=productp.id
                     Join productp_cat on productp.cat = productp_cat.id
                     Where promoter.user_id ={$userId}

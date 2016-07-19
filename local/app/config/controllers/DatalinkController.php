@@ -85,7 +85,7 @@ class DatalinkController extends BaseController
               return ireturn(json_encode($result));
 
           case 'get_productps':
-            $sql = "SELECT productp.id as id,productp.name as name,productp.price as price,productp_cat.name as cat,productp_cat.id as cat_id
+            $sql = "SELECT productp.id as id,productp.name as name,productp_cat.name as cat,productp_cat.id as cat_id
               FROM productp
               Join productp_cat on productp.cat=productp_cat.id";
 
@@ -222,18 +222,16 @@ class DatalinkController extends BaseController
 
           $productps = explode("|", $data_iOS->productps);
           $qnts = explode("|", $data_iOS->qnts);
-          $prices = explode("|", $data_iOS->prices);
 
           foreach ($productps as $key => $productp) {
             $promoter = new Promoter;
             $promoter->user_id = $user_id;
             $promoter->productp_id = $productps[$key];
             $promoter->qnt = $qnts[$key];
-            $promoter->price = $prices[$key];
-            $promoter->date = date("Y-m-d H:i:s", strtotime($date));;
+            $promoter->date = $date;
             $promoter->save();
           }
-          return ireturn("", $data_iOS->conf);
+          return ireturn("", $date);
 
         case 'test':
           return json_encode("4");

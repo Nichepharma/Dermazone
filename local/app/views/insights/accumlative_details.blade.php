@@ -48,15 +48,18 @@
                 <thead>
                 <tr>
                     <th st-sort="name">name</th>
+                    <th st-sort="name">Customer Status</th>
                     <th st-sort="speciality">speciality</th>
                     <th st-sort="grade">Class</th>
                     <th st-sort="area">area</th>
+                    <th st-sort="n_visits">Visits Rate</th>
                     @foreach($data['months'] as $month)
                         <th colspan="5">{{$month}}</th>
                     @endforeach
                 </tr>
                 <tr>
-                    <th><input st-search="name" placeholder="Search for Name" class="input-sm form-control" type="search"/></th>
+                  <th><input st-search="name" placeholder="Search for Name" class="input-sm form-control" type="search"/></th>
+                  <th></th>
                     <th>
                         <select st-search="speciality" class="form-control">
                             <option value="">- All -</option>
@@ -72,6 +75,9 @@
                     <th>
                         <input st-search="area" placeholder="search for area" class="input-sm form-control" type="search"/>
                     </th>
+                    <th>
+
+                    </th>
                     @foreach($data['months'] as $month)
                         <th>W1</th>
                         <th>W2</th>
@@ -83,10 +89,12 @@
                 </thead>
                 <tbody>
                 <tr ng-repeat="row in displayDoctorsCollection">
-                    <td><a href="{{url('customers/doctor')}}/[[row.customer_id]]" target="_blank">[[$index+1]]. [[row.name]]</a></td>
+                  <td><a href="{{url('customers/doctor')}}/[[row.customer_id]]" target="_blank">[[$index+1]]. [[row.name]]</a></td>
+                  <td>[[row.status]]</td>
                     <td>[[row.speciality]]</td>
                     <td>[[row.grade]]</td>
                     <td ng-init="row.area = areas[row.area_id]">[[ row.area ]]</td>
+                    <td>[[row.n_visits]]</td>
                     @foreach($data['months'] as $monthNum=>$month)
                         <td>
                             <div ng-repeat="visit in row.visits">
@@ -194,6 +202,7 @@
                     <th st-sort="name">name</th>
                     <th st-sort="class">Class</th>
                     <th st-sort="area">area</th>
+                    <th st-sort="n_visits">Visits Rate</th>
                     @foreach($data['months'] as $month)
                         <th colspan="5">{{$month}}</th>
                     @endforeach
@@ -209,6 +218,9 @@
                     <th>
                         <input st-search="area" placeholder="search for area" class="input-sm form-control" type="search"/>
                     </th>
+                    <th>
+
+                    </th>
                     @foreach($data['months'] as $month)
                         <th>W1</th>
                         <th>W2</th>
@@ -223,6 +235,7 @@
                     <td><a href="{{url('customers/pharmacy')}}/[[row.customer_id]]" target="_blank">[[$index+1]]. [[row.name]]</a></td>
                     <td>[[row.class]]</td>
                     <td ng-init="row.area = areas[row.area_id]">[[ row.area ]]</td>
+                    <td>[[row.n_visits]]</td>
                     @foreach($data['months'] as $monthNum=>$month)
                         <td>
                             <div ng-repeat="visit in row.visits">
@@ -344,7 +357,25 @@
             </table>
 
             <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
-                   id="sumreportTable">
+                   id="sumreportTable_overall">
+                <thead>
+                <tr>
+                    <th st-sort="test">Private Market</th>
+                    <th st-sort="test">Pharmacies</th>
+                    <th st-sort="test">Workshops</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in displaysumreportCollectionOverall">
+                    <td>[[row.doctors]]</td>
+                    <td>[[row.phs]]</td>
+                    <td>[[row.workshops]]</td>
+                </tr>
+                </tbody>
+            </table>
+            <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
+                   id="sumreportTable_spec">
                 <thead>
                 <tr>
                     <th st-sort="test">Speciality</th>
@@ -476,11 +507,21 @@
                                 scope.displaysumreportCollection = [].concat(scope.sumreportCollection);
                                 scope.sumreportCollectionTotal = response.data.sumreportTotal;
                                 scope.displaysumreportCollectionTotal = [].concat(scope.sumreportCollectionTotal);
+                                scope.sumreportCollectionOverall = response.data.sumreportOverall;
+                                scope.displaysumreportCollectionOverall = [].concat(scope.sumreportCollectionOverall);
                                 //scope.areas = angular.fromJson(response.data.areas);
-                                $('#sumreportTable').fadeIn();
+                                $('#sumreportTable_overall').fadeIn();
+                                if (scope.sumreportCollectionTotal[0]['total'] != 0){
+                                  $('#sumreportTable_spec').fadeIn();
+                                }
+
                             });
                 } else {
-                    $('#sumreportTable').fadeIn();
+                    $('#sumreportTable_overall').fadeIn();
+                    if (scope.sumreportCollectionTotal[0]['total'] != 0){
+                      $('#sumreportTable_spec').fadeIn();
+                    }
+
                 }
             };
 

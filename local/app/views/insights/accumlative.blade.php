@@ -8,15 +8,18 @@
 @stop
 
 @section('content')
-    <div class="@if($data['provinceId'] == null) page-content @else page-content1 @endif">
+    <div class="page-content1">
 
-        @include('layout.inner_left_menu',[
-        'items'=>$data['provinces'],
+        <?php
+        $arr = array('items'=>$data['provinces'],
         'url'=>'insights/accumulative',
-        'active'=>$data['provinceId'],
         'headUrl'=>'insights/accumulative',
-        'title'=>'Provinces',
-        ])
+        'title'=>'Provinces');
+        if($data['provinceId'] != 0){
+          $arr['active'] = $data['provinceId'];
+        }
+        ?>
+        @include('layout.inner_left_menu',$arr)
         <div class='col-md-10 col-xs-12'>
             @if($data['provinceId'] != null)
                 @include('others.print_buttons')
