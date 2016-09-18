@@ -35,6 +35,7 @@ class InsightsController extends BaseController
             $this->data['products'][$id] = $name . ': 0';
             $this->data['calls'][$id] = 0;
         }
+
 //        $this->data['calls'] = [];
 //        return $calls;
         foreach ($calls as $productId => $productVisits) {
@@ -44,6 +45,13 @@ class InsightsController extends BaseController
 
         }
 //        return $this->data['calls'];
+
+        //Sorting the first array based on the number of calls
+        arsort($this->data['calls']);
+        foreach ($this->data['calls'] as $key => $value) {
+          $sorted_products[$key] = $this->data['products'][$key];
+        }
+        $this->data['products'] = $sorted_products;
 
         return View::make($this->data['modules'] . '.products', ['data' => $this->data]);
     }
@@ -648,7 +656,7 @@ class InsightsController extends BaseController
                                                           where user_customer.customer_id = customer.id
                                                           And user_customer.user_id=$userId)
                                              then
-                                                  ''
+                                                  'Active Visited'
                                               else
                                                   ' In-Active'
                                               end
@@ -854,7 +862,7 @@ class InsightsController extends BaseController
 
                 case 'promoters':
 
-                    $sql = "SELECT promoter.date as date, promoter.price as price,promoter.qnt as qnt, productp.name as product_name,productp_cat.name as cat 
+                    $sql = "SELECT promoter.date as date, promoter.price as price,promoter.qnt as qnt, productp.name as product_name,productp_cat.name as cat
                     from promoter
                     JOIN productp on promoter.productp_id=productp.id
                     Join productp_cat on productp.cat = productp_cat.id

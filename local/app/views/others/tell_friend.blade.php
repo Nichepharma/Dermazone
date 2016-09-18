@@ -1,6 +1,6 @@
 <?php
 if (count($_POST)) {
-    foreach (array('fmail1', 'email', 'name', 'refurl') as $key) {
+    foreach (array('fmail1', 'fmail2', 'fmail3', 'email', 'name') as $key) {
         $_POST[$key] = strip_tags($_POST[$key]);
     }
     if (!is_secure($_POST)) {
@@ -10,32 +10,51 @@ if (count($_POST)) {
     $thankyoupage = "thankyou.htm";
 // Subject line for the recommendation - change to suit
     $tsubject = "A web page recommendation from $_POST[name]";
+//$headers['Cc'] = $_POST['email'];
+// Change the text below for the email 
+// Be careful not to change anyt "$_POST[value]" bits
 
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= 'From: <"$_POST[fmail1]">' . "\r\n";
-    $headers .= 'Cc: $_POST[email]' . "\r\n";
     $ttext = "
-				Hi,
+Hi,
 
-				$_POST[name], whose email address is $_POST[email] thought you may be interested in this web page. 
+$_POST[name], whose email address is $_POST[email] thought you may be interested in this web page. 
 
-				$_POST[refurl]?startDate=$data[startDate]&endDate=$data[endDate]
+$_POST[refurl]?startDate=$data[startDate]&endDate=$data[endDate]
 
-				$_POST[name] has used our Tell-a-Friend form to send you this note.
+$_POST[name] has used our Tell-a-Friend form to send you this note.
 
-				We look forward to your visit!";
+We look forward to your visit!
 
-    pr($ttext);
+				";
+    if (isset($_POST['message']) && !empty($_POST['message'])) {
+        $ttext = "
+Hi,
+
+$_POST[name], whose email address is $_POST[email] thought you may be interested in this web page. 
+
+$_POST[refurl]?startDate=$data[startDate]&endDate=$data[endDate]
+
+\"$_POST[message]\"
+
+$_POST[name] has used our Tell-a-Friend form to send you this note.
+
+We look forward to your visit!
+
+				";
+    }
+    $cc = "";
+    if (isset($_POST[cc]) and !empty($_POST[cc])) {
+        $cc = $_POST[cc];
+    }
+    $headers = 'From: ' . $_POST[email] . "\r\n" . 'Cc: ' . $cc . "\r\n";
 # This sends the note to the addresses submitted
-if(mail("$_POST[fmail1]", $tsubject, $ttext, "FROM: $_POST[email]")){
+    if (mail("$_POST[fmail1]", $tsubject, $ttext, $headers)) {
 # After submission, the thank you page
-    echo "<h4>The email has been sent successfully</h4>";
-}else{
-    echo "<h4>Some error happened, please try again later</h4>";
-}
-
-
+        echo "<h4>The email has been sent successfully</h4>";
+    } else {
+        echo "<h4>Some error happened, please try again later</h4>";
+    }
+//header("Location: $thankyoupage");
     exit;
 }
 
@@ -66,7 +85,6 @@ function array_values_recursive($array)
     }
     return $arrayValues;
 }
-
 ?>
 <html>
 <head>
@@ -112,7 +130,8 @@ function array_values_recursive($array)
     <tr valign="top">
         <td valign="middle" align="center">&nbsp;
             Complete the details below to send a link to the page:<br>
-            <?php $refurl = $_SERVER['HTTP_REFERER']; ?>
+            <? $refurl = $_SERVER['HTTP_REFERER']; ?>
+            <? print $refurl;?>
             <form name="tellafriend" action="" method="post" onsubmit="return checkfields()">&nbsp;
                 <div align="center">
                     <center>
@@ -140,9 +159,21 @@ function array_values_recursive($array)
                                 </td>
                             </tr>
                             <tr>
+                                <td>CC:</td>
+                                <td>
+                                    <input size="30" name="cc" maxlength="50">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Message:</td>
+                                <td>
+                                    <textarea rows="6" cols="32" name="message" maxlength="50"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
                                 <td colspan="2">
                                     <input onclick="validate();" type="button" value="Send">
-                                    <input type=hidden name=refurl value="<?php print $refurl; ?>">
+                                    <input type=hidden name=refurl value="<? print $refurl;?>">
 
                                 </td>
                             </tr>
