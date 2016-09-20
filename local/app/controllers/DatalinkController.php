@@ -49,29 +49,29 @@ class DatalinkController extends BaseController
           $customers = DB::table('user_customer')->where('user_id' , $data_iOS->rep_id)
           ->join('customer', 'user_customer.customer_id', '=', 'customer.id')
           ->join('doctor', 'customer.id', '=', 'doctor.customer_id')
-          //->join('city', 'customer.city_id', '=', 'city.id')
-          ->select('customer.id' , 'doctor.name' , 'doctor.speciality' , 'doctor.center');
-
-          $customers_with_prospects = DB::table('customer')->whereBetween('customer.id', array(710, 714))
-          ->join('doctor', 'customer.id', '=', 'doctor.customer_id')
           ->select('customer.id' , 'doctor.name' , 'doctor.speciality' , 'doctor.center')
-          ->union($customers)
           ->get();
 
-          return ireturn(json_encode($customers_with_prospects));
+          // $customers_with_prospects = DB::table('customer')->whereBetween('customer.id', array(710, 714))
+          // ->join('doctor', 'customer.id', '=', 'doctor.customer_id')
+          // ->select('customer.id' , 'doctor.name' , 'doctor.speciality' , 'doctor.center')
+          // ->union($customers)
+          // ->get();
+
+          return ireturn(json_encode($customers));
 
           case 'get_phs':
             $customers = DB::table('user_customer')->where('user_id' , $data_iOS->rep_id)
             ->join('customer', 'user_customer.customer_id', '=', 'customer.id')
             ->join('pharmacy', 'customer.id', '=', 'pharmacy.customer_id')
-            //->join('city', 'customer.city_id', '=', 'city.id')
-            ->select('customer.id' , 'pharmacy.name' , 'pharmacy.center');
-
-            $customers_with_prospects = DB::table('customer')->whereBetween('customer.id', array(715, 719))
-            ->join('pharmacy', 'customer.id', '=', 'pharmacy.customer_id')
             ->select('customer.id' , 'pharmacy.name' , 'pharmacy.center')
-            ->union($customers)
             ->get();
+
+            // $customers_with_prospects = DB::table('customer')->whereBetween('customer.id', array(715, 719))
+            // ->join('pharmacy', 'customer.id', '=', 'pharmacy.customer_id')
+            // ->select('customer.id' , 'pharmacy.name' , 'pharmacy.center')
+            // ->union($customers)
+            // ->get();
 
             return ireturn(json_encode($customers_with_prospects));
 
