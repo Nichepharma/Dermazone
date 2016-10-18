@@ -182,9 +182,11 @@ class KpiController extends BaseController
 
         SELECT product_id, samples, user_id
         FROM visit
+        where date(visit.date) between '{$this->data['startDate']}' and '{$this->data['endDate']}'
         UNION ALL
         SELECT product_id, samples, user_id
         FROM workshop
+        where date(workshop.workshop_date) between '{$this->data['startDate']}' and '{$this->data['endDate']}'
         )t
         JOIN product ON t.product_id = product.id
         WHERE user_id =$userIdCustomized
@@ -196,9 +198,11 @@ class KpiController extends BaseController
         FROM (
         SELECT product_id, samples, samples_type, user_id
         FROM visit
+        where date(visit.date) between '{$this->data['startDate']}' and '{$this->data['endDate']}'
         UNION ALL
         SELECT product_id, samples, samples_type, user_id
         FROM workshop
+        where date(workshop.workshop_date) between '{$this->data['startDate']}' and '{$this->data['endDate']}'
         )t
         JOIN product ON t.product_id = product.id
         WHERE user_id =$userIdCustomized
