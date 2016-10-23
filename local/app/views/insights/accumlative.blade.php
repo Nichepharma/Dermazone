@@ -33,6 +33,7 @@
                         <th>Product Insights</th>
                         <th>Calls</th>
                         <th>Visits</th>
+                        <th>Double Visits</th>
                         <th>Comments</th>
                     </tr>
                     </thead>
@@ -48,6 +49,7 @@
                             <td><a href='{{url('insights/user-products/'.$rep->id)}}'>Products</a></td>
                             <td class="callsCount">0</td>
                             <td class="visitsCount">0</td>
+                            <td class="d_callsCount">0</td>
                             <td>
                                 <a href="javascript:;" onmousedown="openCommentForm({{$rep->id}});">
                                     <i class="glyphicon	glyphicon-plus"></i>
@@ -149,6 +151,7 @@
                     $.each(response.repsData, function (userId, userData) {
                         $('#rep-' + userId).find('.visitsCount').html(userData.visits);
                         $('#rep-' + userId).find('.callsCount').html(userData.calls);
+                        $('#rep-' + userId).find('.d_callsCount').html(userData.d_calls);
                     });
                 }
             });

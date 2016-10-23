@@ -557,7 +557,8 @@ class InsightsController extends BaseController
             $data['comments'] = DB::select($sql);
 
 
-            $sql = "select `user_id`, count(*) AS `calls`
+            $sql = "SELECT `user_id`, count(*) AS `calls`,
+                    SUM(CASE WHEN visit_type = 1 THEN 1 ELSE 0 END) AS 'd_calls'
                     from `visit`
                     WHERE DATE(`visit`.`date`) BETWEEN '{$this->data['startDate']}' and '{$this->data['endDate']}'";
             if (!$this->data['user']->is('admin')) {
@@ -570,10 +571,11 @@ class InsightsController extends BaseController
             $visits = arrayGroupBy($visits, 'user_id');
 
             foreach ($visits as $userId => $userVisits) {
-                $data['repsData'][$userId]['visits'] = count($userVisits);
+                $data['repsData'][$userId]['visits'] += count($userVisits);
 
                 foreach ($userVisits as $userVisit) {
                     $data['repsData'][$userId]['calls'] += $userVisit->calls;
+                    $data['repsData'][$userId]['d_calls'] += $userVisit->d_calls;
                 }
 
             }
@@ -612,7 +614,7 @@ class InsightsController extends BaseController
 
             $sql = "SELECT user.id, user.fullname from user
             LEFT JOIN role_user on user.id = role_user.user_id
-            WHERE province_id=$provinceId AND (role_user.role_id=3 OR user.id in (10, 14))";
+            WHERE province_id=$provinceId AND (role_user.role_id=3 OR role_user.role_id=10 OR user.id in (10, 14, 18))";
 
             if (!$this->data['user']->is('admin')) {
                 $sql .= " and `user`.`id` in (" . toString($this->data['userChildren']) . ")";
