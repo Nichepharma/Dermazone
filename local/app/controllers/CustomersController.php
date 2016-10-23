@@ -332,6 +332,11 @@ function modifySpec($sp){
   $sp = trim($sp);
 
  // check thta or is on the beginning of the string
+ //start by fixed complete spec
+ if(strtolower($sp) == 'salesman' || strtolower($sp) == 'sales man' || strtolower($sp) == 'merchandiser' || strtolower($sp) == 'helper' || strtolower($sp) == 'salesman' || strtolower($sp) == 'promoter'){
+ return $sp;
+ }
+
 if(stripos($sp, 'or') === 0){
 return "ORS";
 }
