@@ -350,7 +350,7 @@
                     <th st-sort="test"></th>
                     <th st-sort="test"></th>
                     <th st-sort="test"></th>
-                    <th st-sort="test">Total : </th>
+                    <th st-sort="test">[[getPromotersUnitsTotal()]]</th>
                     <th st-sort="test">[[getPromotersTotal()]]</th>
                 </tr>
               </tfoot>
@@ -546,6 +546,15 @@
                 for(var i = 0; i < scope.displaypromotersCollection.length; i++){
                     var product = scope.displaypromotersCollection[i];
                     total += (product.price * product.qnt);;
+                }
+                return total;
+            }
+
+            scope.getPromotersUnitsTotal = function(){
+                var total = 0;
+                for(var i = 0; i < scope.displaypromotersCollection.length; i++){
+                    var product = scope.displaypromotersCollection[i];
+                    total +=  (product.qnt * 1.0);
                 }
                 return total;
             }
