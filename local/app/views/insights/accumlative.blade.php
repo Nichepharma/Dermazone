@@ -24,6 +24,21 @@
             @if($data['provinceId'] != null)
                 @include('others.print_buttons')
 
+                @if($data['reps'] == true)
+                <h2>General Reports</h2>
+                <table class="table">
+                <thead>
+                <tr>
+                    <th>Report Name</th>
+                    <th>Link</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <td>Over Year Achievement</td>
+                  <td><a href="http://tacitapp.com/dermazone/insights/accumulative-details/1"> Report </a></td>
+                </tbody>
+                </table>
+                @endif
 
                 <h2>Accumlative Insights</h2>
                 <table class="table">

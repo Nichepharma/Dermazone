@@ -626,6 +626,9 @@ class InsightsController extends BaseController
 
         }
 
+        if ($this->data['user']->is('admin')) {
+            $this->data['IsAdmin'] == true;
+        }
         return View::make($this->data['modules'] . '.accumlative', ['data' => $this->data]);
     }
 
@@ -875,6 +878,28 @@ class InsightsController extends BaseController
                     $data['promoters'] = $promoters;
                     break;
 
+                case 'overyearpromoters':
+
+                    $sql = "SELECT user.*, sum(qnt * price) as total
+                            ,sum(case when MONTH(date)=1 then qnt * price end) as m1
+                            ,sum(case when MONTH(date)=2 then qnt * price end) as m2
+                            ,sum(case when MONTH(date)=3 then qnt * price end) as m3
+                            ,sum(case when MONTH(date)=4 then qnt * price end) as m4
+                            ,sum(case when MONTH(date)=5 then qnt * price end) as m5
+                            ,sum(case when MONTH(date)=6 then qnt * price end) as m6
+                            ,sum(case when MONTH(date)=7 then qnt * price end) as m7
+                            ,sum(case when MONTH(date)=8 then qnt * price end) as m8
+                            ,sum(case when MONTH(date)=9 then qnt * price end) as m9
+                            ,sum(case when MONTH(date)=10 then qnt * price end) as m10
+                            ,sum(case when MONTH(date)=11 then qnt * price end) as m11
+                            ,sum(case when MONTH(date)=12 then qnt * price end) as m12
+                            from promoter
+                            right join (SELECT user.id,user.fullname FROM user join role_user on user.id=role_user.user_id and role_id=10) user on promoter.user_id=user.id
+                            GROUP BY user.id";
+                    $overyearpromoters = DB::select($sql);
+                    $data['overyearpromoters'] = $overyearpromoters;
+                    break;
+
                 case "sumreport":
                     $sql = "SELECT
                             COALESCE(sum(case when type=1 then 1 end), 0) as doctors,
@@ -925,6 +950,9 @@ class InsightsController extends BaseController
 
         if(UserRole::where('user_id', $userId)->get(['role_id'])[0]->role_id == 10){
             $this->data['IsPromoter'] = true;
+        }
+        if(UserRole::where('user_id', $userId)->get(['role_id'])[0]->role_id == 1){
+            $this->data['IsAdmin'] = true;
         }
 
         return View::make($this->data['modules'] . '.accumlative_details', ['data' => $this->data]);

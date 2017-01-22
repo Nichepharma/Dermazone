@@ -19,6 +19,10 @@
             <div class="col-md-2 col-xs-6">
                 <button class="buttonallsite3" ng-class="{'active': activeTab=='promoters'}" ng-click="showPromoters()">Sales In Details</button>
             </div>
+          @elseif($data['IsAdmin'] == true)
+            <div class="col-md-2 col-xs-6">
+                <button class="buttonallsite3" ng-class="{'active': activeTab=='overyearpromoters'}" ng-click="showOverYearPromoters()">Over Year Achievement</button>
+            </div>
           @else
             <div class="col-md-2 col-xs-6">
                 <button class="buttonallsite3" ng-class="{'active': activeTab=='doctors'}" ng-click="showDoctors()">Private Market</button>
@@ -356,6 +360,57 @@
               </tfoot>
             </table>
 
+            <table st-safe-src="overyearpromotersCollection" st-table="displayoveryearpromotersCollection" class="table table-striped table-bordered"
+                   id="overyearpromotersTable">
+                <thead>
+                <tr>
+                    <th st-sort="test">#</th>
+                    <th st-sort="date">Promoter Name</th>
+                    <th st-sort="test" ng-repeat="n in [1,2,3,4,5,6,7,8,9,10,11,12]">[[getMonth(n)]]</th>
+                    <th st-sort="test">Total</th>
+                </tr>
+
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in displayoveryearpromotersCollection">
+                    <td>[[$index+1]]</td>
+                    <td><a href="http://tacitapp.com/dermazone/insights/accumulative-details/[[row.id]]">[[row.fullname]]</a></td>
+                    <td>[[row.m1]]</td>
+                    <td>[[row.m2]]</td>
+                    <td>[[row.m3]]</td>
+                    <td>[[row.m4]]</td>
+                    <td>[[row.m5]]</td>
+                    <td>[[row.m6]]</td>
+                    <td>[[row.m7]]</td>
+                    <td>[[row.m8]]</td>
+                    <td>[[row.m9]]</td>
+                    <td>[[row.m10]]</td>
+                    <td>[[row.m11]]</td>
+                    <td>[[row.m12]]</td>
+                    <td>[[row.total]]</td>
+                </tr>
+                </tbody>
+                <tfoot>
+                <tr>
+                  <th st-sort="test"></th>
+                  <th st-sort="test"></th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(1)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(2)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(3)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(4)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(5)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(6)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(7)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(8)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(9)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(10)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(11)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal(12)]]</th>
+                    <th st-sort="test">[[getOverYearPromotersTotal("total")]]</th>
+                </tr>
+              </tfoot>
+            </table>
+
             <table st-safe-src="sumreportCollection" st-table="displaysumreportCollection" class="table table-striped table-bordered"
                    id="sumreportTable_overall">
                 <thead>
@@ -541,6 +596,23 @@
                 }
             };
 
+            scope.showOverYearPromoters = function () {
+                $('.table').hide();
+                scope.activeTab = 'overyearpromoters';
+                if (typeof (scope.overyearpromotersCollection) === 'undefined') {
+                    $http.get('{{url('insights/accumulative-details/'.$data['userData']->id.'?type=overyearpromoters')}}')
+                            .then(function (response) {
+                                scope.overyearpromotersCollection = response.data.overyearpromoters;
+                                scope.displayoveryearpromotersCollection = [].concat(scope.overyearpromotersCollection);
+                                //scope.areas = angular.fromJson(response.data.areas);
+                                $('#overyearpromotersTable').fadeIn();
+                            });
+                } else {
+                    $('#overyearpromotersTable').fadeIn();
+                }
+            };
+
+
             scope.getPromotersTotal = function(){
                 var total = 0;
                 for(var i = 0; i < scope.displaypromotersCollection.length; i++){
@@ -559,8 +631,40 @@
                 return total;
             }
 
+            //for over all promoters report
+            scope.getMonth = function(index){
+              var monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+              ];
+                return monthNames[index-1];
+            }
+
+            scope.getOverYearPromotersTotal = function(index){
+                var total = 0;
+                for(var i = 0; i < scope.displayoveryearpromotersCollection.length; i++){
+                    var row = scope.displayoveryearpromotersCollection[i];
+                    if(index == 1){total +=  row["m1"] * 1;}
+                    else if(index == 2){total +=  row["m2"] * 1;}
+                    else if(index == 3){total +=  row["m3"] * 1;}
+                    else if(index == 4){total +=  row["m4"] * 1;}
+                    else if(index == 5){total +=  row["m5"] * 1;}
+                    else if(index == 6){total +=  row["m6"] * 1;}
+                    else if(index == 7){total +=  row["m7"] * 1;}
+                    else if(index == 8){total +=  row["m8"] * 1;}
+                    else if(index == 9){total +=  row["m9"] * 1;}
+                    else if(index == 10){total +=  row["m10"] * 1;}
+                    else if(index == 11){total +=  row["m11"] * 1;}
+                    else if(index == 12){total +=  row["m12"] * 1;}
+                    else if(index == 'total'){total +=  row["total"] * 1;}
+                }
+                //alert(row["m11"]);
+                return total;
+            }
+
             @if($data['IsPromoter'] == true)
             scope.showPromoters();
+            @elseif($data['IsAdmin'] == true)
+            scope.showOverYearPromoters();
             @else
             scope.showDoctors();
             @endif
